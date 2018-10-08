@@ -1,0 +1,3 @@
+D:/Users/Valentin/CLionProjects/tcpip_client/cmake-build-debug/CMakeFiles/tcpip_client.dir
+D:/Users/Valentin/CLionProjects/tcpip_client/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/Users/Valentin/CLionProjects/tcpip_client/cmake-build-debug/CMakeFiles/rebuild_cache.dir

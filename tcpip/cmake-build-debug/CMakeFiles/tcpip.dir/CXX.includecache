@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+D:/Users/Valentin/CLionProjects/tcpip/main.cpp
+windows.h
+-
+stdio.h
+-
+iostream
+-
+thread
+-
+mutex
+-
+set
+-
+map
+-
+

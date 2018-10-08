@@ -1,0 +1,3 @@
+"D:\Programs\CLion 2016.3.2\bin\cmake\bin\cmake.exe" -E remove -f CMakeFiles\tcpip.dir/objects.a
+D:\Programming\MinGW\bin\ar.exe cr CMakeFiles\tcpip.dir/objects.a @CMakeFiles\tcpip.dir\objects1.rsp
+D:\Programming\MinGW\bin\g++.exe  -g   -Wl,--whole-archive CMakeFiles\tcpip.dir/objects.a -Wl,--no-whole-archive  -o tcpip.exe -Wl,--out-implib,libtcpip.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\tcpip.dir\linklibs.rsp
