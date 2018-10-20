@@ -47,10 +47,10 @@ RM = "D:\Programs\CLion 2016.3.2\bin\cmake\bin\cmake.exe" -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = D:\Users\Valentin\CLionProjects\tcpip
+CMAKE_SOURCE_DIR = D:\Users\Valentin\CLionProjects\tcpip_git\tcpip
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = D:\Users\Valentin\CLionProjects\tcpip\cmake-build-debug
+CMAKE_BINARY_DIR = D:\Users\Valentin\CLionProjects\tcpip_git\tcpip\cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -79,9 +79,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start D:\Users\Valentin\CLionProjects\tcpip\cmake-build-debug\CMakeFiles D:\Users\Valentin\CLionProjects\tcpip\cmake-build-debug\CMakeFiles\progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start D:\Users\Valentin\CLionProjects\tcpip_git\tcpip\cmake-build-debug\CMakeFiles D:\Users\Valentin\CLionProjects\tcpip_git\tcpip\cmake-build-debug\CMakeFiles\progress.marks
 	$(MAKE) -f CMakeFiles\Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start D:\Users\Valentin\CLionProjects\tcpip\cmake-build-debug\CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start D:\Users\Valentin\CLionProjects\tcpip_git\tcpip\cmake-build-debug\CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -122,6 +122,60 @@ tcpip/fast:
 	$(MAKE) -f CMakeFiles\tcpip.dir\build.make CMakeFiles/tcpip.dir/build
 .PHONY : tcpip/fast
 
+Client.obj: Client.cpp.obj
+
+.PHONY : Client.obj
+
+# target to build an object file
+Client.cpp.obj:
+	$(MAKE) -f CMakeFiles\tcpip.dir\build.make CMakeFiles/tcpip.dir/Client.cpp.obj
+.PHONY : Client.cpp.obj
+
+Client.i: Client.cpp.i
+
+.PHONY : Client.i
+
+# target to preprocess a source file
+Client.cpp.i:
+	$(MAKE) -f CMakeFiles\tcpip.dir\build.make CMakeFiles/tcpip.dir/Client.cpp.i
+.PHONY : Client.cpp.i
+
+Client.s: Client.cpp.s
+
+.PHONY : Client.s
+
+# target to generate assembly for a file
+Client.cpp.s:
+	$(MAKE) -f CMakeFiles\tcpip.dir\build.make CMakeFiles/tcpip.dir/Client.cpp.s
+.PHONY : Client.cpp.s
+
+Command.obj: Command.cpp.obj
+
+.PHONY : Command.obj
+
+# target to build an object file
+Command.cpp.obj:
+	$(MAKE) -f CMakeFiles\tcpip.dir\build.make CMakeFiles/tcpip.dir/Command.cpp.obj
+.PHONY : Command.cpp.obj
+
+Command.i: Command.cpp.i
+
+.PHONY : Command.i
+
+# target to preprocess a source file
+Command.cpp.i:
+	$(MAKE) -f CMakeFiles\tcpip.dir\build.make CMakeFiles/tcpip.dir/Command.cpp.i
+.PHONY : Command.cpp.i
+
+Command.s: Command.cpp.s
+
+.PHONY : Command.s
+
+# target to generate assembly for a file
+Command.cpp.s:
+	$(MAKE) -f CMakeFiles\tcpip.dir\build.make CMakeFiles/tcpip.dir/Command.cpp.s
+.PHONY : Command.cpp.s
+
 main.obj: main.cpp.obj
 
 .PHONY : main.obj
@@ -158,6 +212,12 @@ help:
 	@echo ... tcpip
 	@echo ... edit_cache
 	@echo ... rebuild_cache
+	@echo ... Client.obj
+	@echo ... Client.i
+	@echo ... Client.s
+	@echo ... Command.obj
+	@echo ... Command.i
+	@echo ... Command.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s

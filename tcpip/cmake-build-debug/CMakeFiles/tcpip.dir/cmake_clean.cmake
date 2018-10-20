@@ -1,5 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/tcpip.dir/main.cpp.obj"
+  "CMakeFiles/tcpip.dir/Command.cpp.obj"
+  "CMakeFiles/tcpip.dir/Client.cpp.obj"
   "tcpip.pdb"
   "tcpip.exe"
   "tcpip.exe.manifest"

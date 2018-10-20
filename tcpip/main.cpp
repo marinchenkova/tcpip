@@ -4,6 +4,7 @@
 #include <thread>
 #include <set>
 #include <map>
+#include "Command.h"
 
 #pragma comment(lib, "ws2_32.lib")
 using namespace std;
@@ -15,15 +16,15 @@ static const int EXIT = 'E';
 static const int LIST = 'L';
 static const int KICK = 'K';
 
-set<int> csSet;
+set<Client> clientSet;
 HANDLE hMutex;
+
 
 typedef struct ClientData {
     int socket;
     struct sockaddr *addr;
     int *addrlen;
 } CDATA, *PCDATA;
-
 
 
 // Initialize Winsock
@@ -60,8 +61,13 @@ void printlnMsg(int socket, char *arr, int size) {
 }
 
 
+void send(char response[CMD_SIZE]) {
+
+}
+
+
 bool readn(int n, int socket) {
-    char buf[10];
+    char buf[CMD_SIZE];
     int rc = 0;
     int fill = 0;
 
@@ -72,6 +78,7 @@ bool readn(int n, int socket) {
     }
 
     printlnMsg(socket, buf, n);
+    //send(response(buf));
     return true;
 }
 
@@ -90,16 +97,63 @@ int checkListen(int *ss, int backlog) {
     int l = listen(*ss, backlog);
     if (l) {
         cerr << "Error calling LISTEN" << endl;
+        return 0;
     }
+    cout << "Socket " << *ss << " created" << endl;
     return l;
 }
+
+
+void listClients() {
+    WaitForSingleObject(hMutex, INFINITE);
+    for (set<Client>::iterator it = clientSet.begin(); it != clientSet.end(); ++it) {
+        cout << ((Client) (*it)).getSocket() << endl;
+    }
+    if (clientSet.size() == 0) cout << "No clients" << endl;
+    ReleaseMutex(hMutex);
+}
+
+
+bool kick(int socket) {
+    WaitForSingleObject(hMutex, INFINITE);
+    for (set<Client>::iterator it = clientSet.begin(); it != clientSet.end(); ++it) {
+        int s = ((Client) (*it)).getSocket();
+        if (s == socket) {
+            shutdown(s, 2);
+            closesocket(s);
+            if (((Client) (*it)).isRegistered()) ((Client) (*it)).logout();
+            else clientSet.erase(((Client) (*it)));
+            return true;
+        }
+    }
+    ReleaseMutex(hMutex);
+    return false;
+}
+
+
+void kickAll(map<int, HANDLE> clientThreadMap) {
+    WaitForSingleObject(hMutex, INFINITE);
+    for (set<Client>::iterator it = clientSet.begin(); it != clientSet.end(); ++it) {
+        int socket = ((Client) (*it)).getSocket();
+
+        if (((Client) (*it)).isRegistered()) ((Client) (*it)).logout();
+        else clientSet.erase(((Client) (*it)));
+
+        shutdown(socket, 2);
+        closesocket(socket);
+        WaitForSingleObject(clientThreadMap[socket], INFINITE);
+        CloseHandle(clientThreadMap[socket]);
+    }
+    ReleaseMutex(hMutex);
+}
+
 
 DWORD WINAPI receiveThread(CONST LPVOID lpParam) {
     CONST PCDATA data = (PCDATA) lpParam;
     WaitForSingleObject(hMutex, INFINITE);
     cout << endl << "Client" << data->socket << " joined" << endl;
     ReleaseMutex(hMutex);
-    while (readn(10, (SOCKET) data->socket)) {}
+    while (readn(10/*CMD_SIZE*/, (SOCKET) data->socket)) {}
     ExitThread(0);
 }
 
@@ -112,20 +166,10 @@ DWORD WINAPI acceptThread(CONST LPVOID lpParam) {
     while (true) {
         if (clientThreadMap.size() <= MAX_THREADS) {
             cs = accept(threadData->socket, threadData->addr, threadData->addrlen);
-            if (cs < 0) {
-                WaitForSingleObject(hMutex, INFINITE);
-                for (int socket : csSet) {
-                    shutdown(socket, 2);
-                    closesocket(socket);
-                    WaitForSingleObject(clientThreadMap[socket], INFINITE);
-                    CloseHandle(clientThreadMap[socket]);
-                }
-                ReleaseMutex(hMutex);
-                break;
-            }
+            if (cs < 0) break;
 
             WaitForSingleObject(hMutex, INFINITE);
-            csSet.insert(cs);
+            clientSet.insert(Client(cs));
             ReleaseMutex(hMutex);
 
             data = (PCDATA) HeapAlloc(
@@ -145,6 +189,8 @@ DWORD WINAPI acceptThread(CONST LPVOID lpParam) {
             );
         }
     }
+
+    kickAll(clientThreadMap);
 
     ExitThread(0);
 }
@@ -174,37 +220,20 @@ int main() {
 
     char cmd;
     bool cont = true;
-    bool found;
-    int id;
+    int ks;
     while (cont) {
         cin >> cmd;
         switch (cmd) {
             case LIST:
                 cout << "Current clients:" << endl;
-                WaitForSingleObject(hMutex, INFINITE);
-
-                for (int socket : csSet) cout << socket << endl;
-                if (csSet.size() == 0) cout << "No clients" << endl;
-                ReleaseMutex(hMutex);
+                listClients();
                 break;
 
             case KICK:
-                cout << "Enter client id to kick: ";
-                cin >> id;
-                found = false;
-                WaitForSingleObject(hMutex, INFINITE);
-                for (int socket : csSet) {
-                    if (socket == id) {
-                        shutdown(socket, 2);
-                        closesocket(socket);
-                        csSet.erase(socket);
-                        cout << "Client " << socket << " was kicked" << endl;
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) cout << "No such client" << endl;
-                ReleaseMutex(hMutex);
+                cout << "Enter client socket to kick: ";
+                cin >> ks;
+                if (kick(ks)) cout << "Client " << ks << " was kicked" << endl;
+                else cout << "No such client" << endl;
                 break;
 
             case EXIT:
@@ -212,7 +241,9 @@ int main() {
                 closesocket(ss);
                 WaitForSingleObject(hAcceptThread, INFINITE);
                 CloseHandle(hAcceptThread);
+                CloseHandle(hMutex);
                 cont = false;
+                cout << "Exit" << endl;
                 break;
 
             default:
