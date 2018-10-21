@@ -8,8 +8,9 @@
 
 using namespace std;
 
-static const int CMD_SIZE = 41;
+
 static const int CMD_DATA_SIZE = 40;
+static const int CMD_SIZE = CMD_DATA_SIZE + 1;
 
 static const char CMD_REGISTER = '0';
 static const char CMD_LOGIN = '1';

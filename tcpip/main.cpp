@@ -53,7 +53,7 @@ int createSocket(struct sockaddr_in *local, const char *addr, u_short port) {
 
 
 void printlnMsg(int socket, char *arr, int size) {
-    printf("Client%d/>", socket);
+    printf("Client socket%d/>", socket);
     for (int i = 0; i < size; i++) {
         printf( "%c", arr[i] );
     }
@@ -107,7 +107,7 @@ int checkListen(int *ss, int backlog) {
 void listClients() {
     WaitForSingleObject(hMutex, INFINITE);
     for (set<Client>::iterator it = clientSet.begin(); it != clientSet.end(); ++it) {
-        cout << ((Client) (*it)).getSocket() << endl;
+        cout << (*it) << endl;
     }
     if (clientSet.size() == 0) cout << "No clients" << endl;
     ReleaseMutex(hMutex);
@@ -151,7 +151,7 @@ void kickAll(map<int, HANDLE> clientThreadMap) {
 DWORD WINAPI receiveThread(CONST LPVOID lpParam) {
     CONST PCDATA data = (PCDATA) lpParam;
     WaitForSingleObject(hMutex, INFINITE);
-    cout << endl << "Client" << data->socket << " joined" << endl;
+    cout << endl << "Client on socket " << data->socket << " joined" << endl;
     ReleaseMutex(hMutex);
     while (readn(10/*CMD_SIZE*/, (SOCKET) data->socket)) {}
     ExitThread(0);

@@ -19,3 +19,12 @@ void Client::logout() {
 bool Client::operator<(const Client &client) const {
     return client._id < _id;
 }
+
+ostream &operator<<(ostream &os, const Client &client) {
+    string str;
+    if (client._registered) str = ": LOGIN " + client._login;
+    else str = ": (NOT REGISTERED)";
+    return os << "Client "
+              << client._socket
+              << str;
+}

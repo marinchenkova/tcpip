@@ -1,9 +1,9 @@
 #include "Command.h"
 
 
-Command::Command(char *cmd) {
+Command::Command(char* cmd) {
     code = cmd[0];
-    copy(cmd, cmd + CMD_DATA_SIZE, data);
+    copy(cmd + 1, cmd + CMD_SIZE, data);
 }
 
 

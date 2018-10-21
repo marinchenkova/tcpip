@@ -2,6 +2,7 @@
 #define TCPIP_CLIENT_H
 
 #include <string>
+#include <iostream>
 
 using namespace std;
 
@@ -28,6 +29,7 @@ public:
     int getSocket() { return _socket; }
     bool isRegistered() { return _registered; }
     bool operator< (const Client &client) const;
+    friend ostream& operator<<(ostream& os, const Client& client);
 };
 
 

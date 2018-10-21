@@ -13,6 +13,8 @@ D:/Users/Valentin/CLionProjects/tcpip_git/tcpip/Client.h
 D:/Users/Valentin/CLionProjects/tcpip_git/tcpip/Client.h
 string
 -
+iostream
+-
 
 D:/Users/Valentin/CLionProjects/tcpip_git/tcpip/Command.cpp
 Command.h
