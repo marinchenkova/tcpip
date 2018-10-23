@@ -20,17 +20,13 @@ bool Client::operator<(const Client &client) const {
     return client._id < _id;
 }
 
-string Client::to_string(Client client) {
-    ostringstream ss;
-    ss << client;
-    return ss.str();
+Client::operator string() const {
+    return "Client " + _socket + (_registered ? ": LOGIN " + _login : ": (NOT REGISTERED)");
 }
 
 ostream &operator<<(ostream &os, const Client &client) {
-    string str;
-    if (client._registered) str = ": LOGIN " + client._login;
-    else str = ": (NOT REGISTERED)";
-    return os << "Client "
-              << client._socket
-              << str;
+    string s = client;
+    return os << s;
 }
+
+

@@ -255,7 +255,8 @@ int main() {
 */
     char cmd[] = "1/123456789012345678901234567890123456789";
     Command com = Command(cmd);
-    cout << com.response(&clientSet);
+    cout << com << endl;
+    cout << com.response(&clientSet) << endl;
     ExitProcess(0);
 }
 

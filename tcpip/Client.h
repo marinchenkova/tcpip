@@ -31,7 +31,7 @@ public:
     int getSocket() { return _socket; }
     bool isRegistered() { return _registered; }
     bool operator< (const Client &client) const;
-    string to_string(Client client);
+    operator string() const;
     friend ostream& operator<<(ostream& os, const Client& client);
 };
 

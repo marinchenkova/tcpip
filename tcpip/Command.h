@@ -44,7 +44,7 @@ public:
     char getCode() { return code; }
     string getData() { return data; }
     string response(set<Client>* clientSet);
-    string to_string(Command command);
+    operator string() const;
     friend ostream& operator<<(ostream& os, const Command& command);
 };
 

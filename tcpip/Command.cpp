@@ -56,9 +56,7 @@ bool isNumber(string str) {
 }
 
 string Command::response(set<Client>* clientSet) {
-    if (data.empty()) {
-        return to_string(Command(RESPONSE_BAD_DATA));
-    }
+    if (data.empty()) return Command(RESPONSE_BAD_DATA);
     switch(code) {
         case CMD_ACCOUNT_ID:
 
@@ -89,19 +87,16 @@ string Command::response(set<Client>* clientSet) {
             break;
 
         default:
-            return to_string(Command(RESPONSE_UNKNOWN_CMD));
+            return Command(RESPONSE_UNKNOWN_CMD);
     }
     return "ok";
 }
 
-
-string Command::to_string(Command command) {
-    ostringstream ss;
-    ss << command;
-    return ss.str();
-}
+Command::operator string() const { return code + data; }
 
 ostream &operator<<(ostream &os, const Command &command) {
-    return os << command.code << command.data;
+    string s = command;
+    return os << s;
 }
+
 
