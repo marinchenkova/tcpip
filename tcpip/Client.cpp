@@ -21,7 +21,9 @@ bool Client::operator<(const Client &client) const {
 }
 
 Client::operator string() const {
-    return "Client " + _socket + (_registered ? ": LOGIN " + _login : ": (NOT REGISTERED)");
+    stringstream ss;
+    ss << _socket;
+    return "Client " + ss.str() + ": " + (_registered ? "LOGIN " + _login : "(NOT REGISTERED)");
 }
 
 ostream &operator<<(ostream &os, const Client &client) {
