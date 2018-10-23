@@ -197,6 +197,7 @@ DWORD WINAPI acceptThread(CONST LPVOID lpParam) {
 
 
 int main() {
+    /*
     struct sockaddr_in local;
     PCDATA acceptThreadData = new ClientData();
     int ss;
@@ -251,7 +252,9 @@ int main() {
                 break;
         }
     }
-
+*/
+    char cmd[] = "10123456789012345678901234567890123456789";
+    Command com = Command(cmd);
     ExitProcess(0);
 }
 

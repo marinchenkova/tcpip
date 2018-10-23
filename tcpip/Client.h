@@ -1,6 +1,7 @@
 #ifndef TCPIP_CLIENT_H
 #define TCPIP_CLIENT_H
 
+#include <sstream>
 #include <string>
 #include <iostream>
 
@@ -8,6 +9,7 @@ using namespace std;
 
 
 static const int LOGIN_SIZE = 20;
+
 
 class Client {
 private:
@@ -29,6 +31,7 @@ public:
     int getSocket() { return _socket; }
     bool isRegistered() { return _registered; }
     bool operator< (const Client &client) const;
+    string to_string(Client client);
     friend ostream& operator<<(ostream& os, const Client& client);
 };
 

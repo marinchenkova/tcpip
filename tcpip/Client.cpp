@@ -20,6 +20,12 @@ bool Client::operator<(const Client &client) const {
     return client._id < _id;
 }
 
+string Client::to_string(Client client) {
+    ostringstream ss;
+    ss << client;
+    return ss.str();
+}
+
 ostream &operator<<(ostream &os, const Client &client) {
     string str;
     if (client._registered) str = ": LOGIN " + client._login;

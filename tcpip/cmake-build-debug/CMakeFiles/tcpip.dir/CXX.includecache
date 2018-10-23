@@ -11,6 +11,8 @@ Client.h
 D:/Users/Valentin/CLionProjects/tcpip_git/tcpip/Client.h
 
 D:/Users/Valentin/CLionProjects/tcpip_git/tcpip/Client.h
+sstream
+-
 string
 -
 iostream
@@ -27,8 +29,12 @@ array
 -
 set
 -
+string
+-
 Client.h
 D:/Users/Valentin/CLionProjects/tcpip_git/tcpip/Client.h
+sstream
+-
 
 D:/Users/Valentin/CLionProjects/tcpip_git/tcpip/main.cpp
 windows.h
