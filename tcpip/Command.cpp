@@ -6,7 +6,7 @@ Command::Command(string cmd) {
     data = cmd.substr(1, CMD_SIZE);
     checkData();
 }
-/*
+
 Command::Command(char response) {
     code = response;
     switch (response) {
@@ -35,11 +35,11 @@ Command::Command(char response) {
             break;
 
         default:
-            data = "ERROR: broken command                   ";
+            data = "ERROR: unknown command                  ";
             break;
     }
 }
-*/
+
 
 void Command::checkData() {
     if (!isWord(data) && !isNumber(data)) data.clear();
@@ -55,8 +55,10 @@ bool isNumber(string str) {
     return true;
 }
 
-const char* Command::response(set<Client>* clientSet) {
-//    if (data.empty()) return Command(RESPONSE_BAD_DATA).to_string().c_str();
+string Command::response(set<Client>* clientSet) {
+    if (data.empty()) {
+        return to_string(Command(RESPONSE_BAD_DATA));
+    }
     switch(code) {
         case CMD_ACCOUNT_ID:
 
@@ -87,15 +89,15 @@ const char* Command::response(set<Client>* clientSet) {
             break;
 
         default:
-
-            break;
+            return to_string(Command(RESPONSE_UNKNOWN_CMD));
     }
+    return "ok";
 }
 
 
-string Command::to_string() {
+string Command::to_string(Command command) {
     ostringstream ss;
-    ss << this;
+    ss << command;
     return ss.str();
 }
 

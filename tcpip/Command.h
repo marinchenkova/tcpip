@@ -22,7 +22,7 @@ static const char CMD_LOGOUT = '4';
 static const char CMD_PAY_TO = '5';
 static const char CMD_REGISTER = '6';
 
-static const char* EMPTY_DATA = "****************************************";
+static const string EMPTY_DATA = "****************************************";
 
 static const char RESPONSE_BAD_DATA = 'b';
 static const char RESPONSE_CLIENTS = 'c';
@@ -30,6 +30,7 @@ static const char RESPONSE_INPUT_INCORRECT = 'i';
 static const char RESPONSE_LOGIN_BUSY = 'l';
 static const char RESPONSE_NEED_LOGIN = 'n';
 static const char RESPONSE_OK = 'o';
+static const char RESPONSE_UNKNOWN_CMD = 'u';
 
 
 class Command {
@@ -42,8 +43,8 @@ public:
     Command(string cmd);
     char getCode() { return code; }
     string getData() { return data; }
-    const char* response(set<Client>* clientSet);
-    string to_string();
+    string response(set<Client>* clientSet);
+    string to_string(Command command);
     friend ostream& operator<<(ostream& os, const Command& command);
 };
 

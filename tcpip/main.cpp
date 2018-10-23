@@ -253,8 +253,9 @@ int main() {
         }
     }
 */
-    char cmd[] = "10123456789012345678901234567890123456789";
+    char cmd[] = "1/123456789012345678901234567890123456789";
     Command com = Command(cmd);
+    cout << com.response(&clientSet);
     ExitProcess(0);
 }
 
