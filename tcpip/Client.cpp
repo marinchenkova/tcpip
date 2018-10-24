@@ -5,15 +5,26 @@ Client::Client(int socket) {
     _socket = socket;
 }
 
-void Client::registerMe(string login, string password, int id) {
+void Client::registerMe(string login, string password, string id) {
     _login = login;
     _password = password;
     _id = id;
     _balance = 0;
+    _logged = true;
+    _registered = true;
+}
+
+void Client::log_in(int socket) {
+    _socket = socket;
+    _logged = true;
+}
+
+void Client::detach() {
+    _socket = -1;
 }
 
 void Client::logout() {
-    _socket = -1;
+    _logged = false;
 }
 
 bool Client::operator<(const Client &client) const {
@@ -23,7 +34,12 @@ bool Client::operator<(const Client &client) const {
 Client::operator string() const {
     stringstream ss;
     ss << _socket;
-    return "Socket " + ss.str() + ": " + (_registered ? "LOGIN " + _login : "(NOT REGISTERED)");
+    return "Socket " + ss.str() + ": " +
+            (_registered
+             ? ("LOGIN " + _login + " ID " + _id  + (_logged
+                                                     ? " online"
+                                                     : " offline"))
+             : "(NOT REGISTERED)");
 }
 
 ostream &operator<<(ostream &os, const Client &client) {
@@ -33,10 +49,32 @@ ostream &operator<<(ostream &os, const Client &client) {
 
 Client* getClient(set<Client> &clientSet, int socket) {
     for (set<Client>::iterator it = clientSet.begin(); it != clientSet.end(); ++it) {
-        int s = ((Client) (*it)).getSocket();
-        if (s == socket) return (Client *) &(*it);
+        if (((Client) (*it)).getSocket() == socket) return (Client *) &(*it);
     }
     return NULL;
+}
+
+Client* getClient(set<Client> &clientSet, string login) {
+    for (set<Client>::iterator it = clientSet.begin(); it != clientSet.end(); ++it) {
+        if (((Client) *it).isRegistered() && (login == ((Client) *it).getLogin()))
+            return (Client *) &(*it);
+    }
+    return NULL;
+}
+
+int numRegistered(set<Client> &clientSet) {
+    int size = 0;
+    for (set<Client>::iterator it = clientSet.begin(); it != clientSet.end(); ++it) {
+        if (((Client) (*it)).isRegistered()) size++;
+    }
+    return size;
+}
+
+bool loginBusy(set<Client> &clientSet, string login) {
+    for (set<Client>::iterator it = clientSet.begin(); it != clientSet.end(); ++it) {
+        if (((Client) (*it)).getLogin() == login) return true;
+    }
+    return false;
 }
 
 

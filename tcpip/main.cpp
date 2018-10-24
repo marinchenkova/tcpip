@@ -5,6 +5,7 @@
 #include <set>
 #include <map>
 #include "Command.h"
+#include "Client.h"
 
 #pragma comment(lib, "ws2_32.lib")
 using namespace std;
@@ -61,8 +62,8 @@ void printlnMsg(int socket, char *arr, int size) {
 }
 
 
-void send(char response[CMD_SIZE]) {
-
+void send(string response) {
+    cout << response << endl;
 }
 
 
@@ -78,7 +79,10 @@ bool readn(int n, int socket) {
     }
 
     printlnMsg(socket, buf, n);
-    //send(response(buf));
+
+    WaitForSingleObject(hMutex, INFINITE);
+    send(Command(buf).response(clientSet, socket));
+    ReleaseMutex(hMutex);
     return true;
 }
 
@@ -114,30 +118,19 @@ void listClients() {
 }
 
 
-bool kick(int socket) {
+void kick(int socket) {
     WaitForSingleObject(hMutex, INFINITE);
     Client* client = getClient(clientSet, socket);
     if (client != NULL) {
         shutdown(socket, 2);
         closesocket(socket);
-        if ((*client).isRegistered()) (*client).logout();
+        client->detach();
+        if (client->isRegistered()) client->logout();
         else clientSet.erase(*client);
-        return true;
+        cout << "Client on socket " << socket << " exited" << endl;
     }
-    /*
-    for (set<Client>::iterator it = clientSet.begin(); it != clientSet.end(); ++it) {
-        int s = ((Client) (*it)).getSocket();
-        if (s == socket) {
-            shutdown(s, 2);
-            closesocket(s);
-            if (((Client) (*it)).isRegistered()) ((Client) (*it)).logout();
-            else clientSet.erase(((Client) (*it)));
-            return true;
-        }
-    }
-    */
+    cout << "No such client" << endl;
     ReleaseMutex(hMutex);
-    return false;
 }
 
 
@@ -157,13 +150,16 @@ void kickAll(map<int, HANDLE> clientThreadMap) {
     ReleaseMutex(hMutex);
 }
 
-
 DWORD WINAPI receiveThread(CONST LPVOID lpParam) {
     CONST PCDATA data = (PCDATA) lpParam;
+
     WaitForSingleObject(hMutex, INFINITE);
     cout << endl << "Client on socket " << data->socket << " joined" << endl;
     ReleaseMutex(hMutex);
-    while (readn(10/*CMD_SIZE*/, (SOCKET) data->socket)) {}
+
+    while (readn(CMD_SIZE, data->socket)) {}
+
+    kick(data->socket);
     ExitThread(0);
 }
 
@@ -243,8 +239,7 @@ int main() {
             case KICK:
                 cout << "Enter client socket to kick: ";
                 cin >> ks;
-                if (kick(ks)) cout << "Client " << ks << " was kicked" << endl;
-                else cout << "No such client" << endl;
+                kick(ks);
                 break;
 
             case EXIT:
@@ -263,12 +258,6 @@ int main() {
         }
     }
 
-/*
-    char cmd[] = "1/123456789012345678901234567890123456789";
-    Command com = Command(cmd);
-    cout << com << endl;
-    cout << com.response(clientSet) << endl;
-*/
     ExitProcess(0);
 }
 

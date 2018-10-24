@@ -9,26 +9,30 @@
 using namespace std;
 
 
-static const int LOGIN_SIZE = 20;
+static const int MAX_WORD_SIZE = 20;
 
 
 class Client {
 private:
     bool _registered = false;
+    bool _logged = false;
     string _login;
     string _password;
     int _balance = 0;
-    int _id = -1;
+    string _id;
     int _socket;
 
 public:
     Client(int socket);
-    void registerMe(string login, string password, int id);
+    bool loggedIn() { return _logged > 0; }
+    void registerMe(string login, string password, string id);
+    void log_in(int socket);
+    void detach();
     void logout();
     string getLogin() { return _login; }
     string getPassword() { return _password; }
     int getBalance() { return _balance; }
-    int getId() { return _id; }
+    string getId() { return _id; }
     int getSocket() { return _socket; }
     bool isRegistered() { return _registered; }
     bool operator< (const Client &client) const;
@@ -37,5 +41,8 @@ public:
 };
 
 Client* getClient(set<Client>& clientSet, int socket);
+Client* getClient(set<Client>& clientSet, string login);
+int numRegistered(set<Client> &clientSet);
+bool loginBusy(set<Client>& clientSet, string login);
 
 #endif //TCPIP_CLIENT_H

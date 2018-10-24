@@ -33,10 +33,10 @@ set
 -
 string
 -
-Client.h
-D:/Users/Valentin/CLionProjects/tcpip_git/tcpip/Client.h
 sstream
 -
+Client.h
+D:/Users/Valentin/CLionProjects/tcpip_git/tcpip/Client.h
 
 D:/Users/Valentin/CLionProjects/tcpip_git/tcpip/main.cpp
 windows.h
@@ -53,4 +53,6 @@ map
 -
 Command.h
 D:/Users/Valentin/CLionProjects/tcpip_git/tcpip/Command.h
+Client.h
+D:/Users/Valentin/CLionProjects/tcpip_git/tcpip/Client.h
 
