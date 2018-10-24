@@ -62,6 +62,16 @@ Client* getClient(set<Client> &clientSet, int socket) {
     return NULL;
 }
 
+Client* getClientByIndex(set<Client> &clientSet, int index) {
+    int count = 0;
+    for (set<Client>::iterator it = clientSet.begin(); it != clientSet.end(); ++it) {
+        if (((Client) *it).isRegistered() && count++ == index) {
+            return (Client *) &(*it);
+        }
+    }
+    return NULL;
+}
+
 Client* getClient(set<Client> &clientSet, string login) {
     for (set<Client>::iterator it = clientSet.begin(); it != clientSet.end(); ++it) {
         if (((Client) *it).isRegistered() && (login == ((Client) *it).getLogin()))

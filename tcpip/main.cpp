@@ -63,7 +63,7 @@ void printlnMsg(int socket, char *arr, int size) {
 
 
 void send(string response) {
-    cout << "[" << response << "]" << endl;
+    cout << response << "]" << endl;
 }
 
 
@@ -75,7 +75,9 @@ bool readn(int n, int socket) {
     while (fill < n) {
         rc = recv(socket, buf + fill, n - fill, 0);
         if (rc <= 0) return false;
+        if (buf[fill] == PREFIX) fill = 0;
         if (buf[0] == PREFIX) fill += rc;
+
     }
 
     printlnMsg(socket, buf, n);

@@ -16,7 +16,6 @@ static const unsigned int CMD_DATA_SIZE = 40;
 static const unsigned int CMD_SIZE = CMD_DATA_SIZE + 1;
 
 static const char PREFIX = '[';
-static const char POSTFIX = ']';
 
 static const char CMD_ACCOUNT_ID = '0';
 static const char CMD_BALANCE    = '1';
@@ -47,6 +46,9 @@ static const string NEED_LOGOUT_STR     = "You are already logged in            
 static const string NEED_NUMBER_STR     = "ERROR  need number                      ";
 static const string UNKNOWN_CMD_STR     = "ERROR  unknown command                  ";
 
+static const string START_ITER_C_STR = "START";
+static const string FINISH_ITER_C_STR = "FINISH";
+
 class Command {
 private:
     char code;
@@ -60,16 +62,13 @@ public:
     static string wrapWelcome(string login);
     static string wrapBye(string login);
     string extractWord(unsigned int start, unsigned int end);
-    unsigned long extractInt(unsigned int start, unsigned int end);
-    char getCode() { return code; }
-    string getData() { return data; }
+    unsigned long extractULong(unsigned int start, unsigned int end);
     string response(set<Client>& clientSet, int socket);
     operator string() const;
     friend ostream& operator<<(ostream& os, const Command& command);
 };
 
 bool isValidData(string str);
-bool isWord(string str);
 bool isNumber(string str);
 string trim(const std::string &s);
 
