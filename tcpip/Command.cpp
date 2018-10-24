@@ -11,7 +11,7 @@ Command::Command(char response) {
     code = response;
     switch (response) {
         case RESPONSE_BAD_DATA:
-            data = "ERROR: broken data, please retry sending";
+            data = BAD_DATA_STR;
             break;
 
         case RESPONSE_CLIENTS:
@@ -19,23 +19,23 @@ Command::Command(char response) {
             break;
 
         case RESPONSE_INPUT_INCORRECT:
-            data = "ERROR: bad input, only A-Z, a-z, 0-9, _ ";
+            data = INPUT_INCORRECT_STR;
             break;
 
         case RESPONSE_LOGIN_BUSY:
-            data = "ERROR: login is busy, try another one   ";
+            data = LOGIN_BUSY_STR;
             break;
 
         case RESPONSE_NEED_LOGIN:
-            data = "ERROR: you need to log in               ";
+            data = NEED_LOGIN_STR;
             break;
 
         case RESPONSE_OK:
-            data = EMPTY_DATA;
+            data = EMPTY_STR;
             break;
 
         default:
-            data = "ERROR: unknown command                  ";
+            data = UNKNOWN_CMD_STR;
             break;
     }
 }
@@ -55,8 +55,9 @@ bool isNumber(string str) {
     return true;
 }
 
-string Command::response(set<Client>* clientSet) {
-    if (data.empty()) return Command(RESPONSE_BAD_DATA);
+string Command::response(set<Client>& clientSet, int socket) {
+    char response_code;
+    if (data.empty()) response_code = RESPONSE_BAD_DATA;
     switch(code) {
         case CMD_ACCOUNT_ID:
 
@@ -87,9 +88,14 @@ string Command::response(set<Client>* clientSet) {
             break;
 
         default:
-            return Command(RESPONSE_UNKNOWN_CMD);
+            response_code = RESPONSE_UNKNOWN_CMD;
+            break;
     }
-    return "ok";
+    return Command(response_code);
+}
+
+string Command::getAccountId() {
+
 }
 
 Command::operator string() const { return code + data; }
@@ -98,5 +104,6 @@ ostream &operator<<(ostream &os, const Command &command) {
     string s = command;
     return os << s;
 }
+
 
 

@@ -23,12 +23,20 @@ bool Client::operator<(const Client &client) const {
 Client::operator string() const {
     stringstream ss;
     ss << _socket;
-    return "Client " + ss.str() + ": " + (_registered ? "LOGIN " + _login : "(NOT REGISTERED)");
+    return "Socket " + ss.str() + ": " + (_registered ? "LOGIN " + _login : "(NOT REGISTERED)");
 }
 
 ostream &operator<<(ostream &os, const Client &client) {
     string s = client;
     return os << s;
+}
+
+Client* getClient(set<Client> &clientSet, int socket) {
+    for (set<Client>::iterator it = clientSet.begin(); it != clientSet.end(); ++it) {
+        int s = ((Client) (*it)).getSocket();
+        if (s == socket) return (Client *) &(*it);
+    }
+    return NULL;
 }
 
 

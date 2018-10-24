@@ -4,6 +4,7 @@
 #include <sstream>
 #include <string>
 #include <iostream>
+#include <set>
 
 using namespace std;
 
@@ -35,5 +36,6 @@ public:
     friend ostream& operator<<(ostream& os, const Client& client);
 };
 
+Client* getClient(set<Client>& clientSet, int socket);
 
 #endif //TCPIP_CLIENT_H

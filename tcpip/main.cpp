@@ -53,7 +53,7 @@ int createSocket(struct sockaddr_in *local, const char *addr, u_short port) {
 
 
 void printlnMsg(int socket, char *arr, int size) {
-    printf("Client socket%d/>", socket);
+    printf("Client socket %d/>", socket);
     for (int i = 0; i < size; i++) {
         printf( "%c", arr[i] );
     }
@@ -116,6 +116,15 @@ void listClients() {
 
 bool kick(int socket) {
     WaitForSingleObject(hMutex, INFINITE);
+    Client* client = getClient(clientSet, socket);
+    if (client != NULL) {
+        shutdown(socket, 2);
+        closesocket(socket);
+        if ((*client).isRegistered()) (*client).logout();
+        else clientSet.erase(*client);
+        return true;
+    }
+    /*
     for (set<Client>::iterator it = clientSet.begin(); it != clientSet.end(); ++it) {
         int s = ((Client) (*it)).getSocket();
         if (s == socket) {
@@ -126,6 +135,7 @@ bool kick(int socket) {
             return true;
         }
     }
+    */
     ReleaseMutex(hMutex);
     return false;
 }
@@ -253,12 +263,12 @@ int main() {
         }
     }
 
-    /*
+/*
     char cmd[] = "1/123456789012345678901234567890123456789";
     Command com = Command(cmd);
     cout << com << endl;
-    cout << com.response(&clientSet) << endl;
-     */
+    cout << com.response(clientSet) << endl;
+*/
     ExitProcess(0);
 }
 
