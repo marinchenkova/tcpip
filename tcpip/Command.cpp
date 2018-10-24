@@ -85,7 +85,6 @@ string Command::response(set<Client>& clientSet, int socket) {
             }
 
             unsigned long amount = extractInt(0, CMD_DATA_SIZE);
-            cout << "amount " << amount << endl;
             if (client->getBalance() < amount) {
                 responseCode = RESPONSE_INPUT_INCORRECT;
                 responseData = INSUF_FUNDS_STR;
@@ -153,8 +152,39 @@ string Command::response(set<Client>& clientSet, int socket) {
         }
 
         case CMD_PAY_TO:
+        {
+            if (!client->isRegistered() || !client->loggedIn()) {
+                responseCode = RESPONSE_NEED_LOGIN;
+                responseData = NEED_LOGIN_STR;
+                break;
+            }
 
+            Client* to = getClient(clientSet, word1);
+            if (to == NULL) {
+                responseCode = RESPONSE_INPUT_INCORRECT;
+                responseData = LOGIN_INCORRECT_STR;
+                break;
+            }
+
+            if (!isNumber(trim(word2))) {
+                responseCode = RESPONSE_INPUT_INCORRECT;
+                responseData = NEED_NUMBER_STR;
+                break;
+            }
+
+            unsigned long amount = extractInt(MAX_WORD_SIZE, CMD_DATA_SIZE);
+            if (client->getBalance() < amount) {
+                responseCode = RESPONSE_INPUT_INCORRECT;
+                responseData = INSUF_FUNDS_STR;
+                break;
+            }
+
+            client->moneyGet(amount);
+            to->moneyPut(amount);
+            responseCode = RESPONSE_OK;
+            responseData = wrapBalance(client->getBalance());
             break;
+        }
 
         case CMD_PUT:
         {
