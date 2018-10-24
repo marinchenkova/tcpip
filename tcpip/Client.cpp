@@ -27,6 +27,14 @@ void Client::logout() {
     _logged = false;
 }
 
+void Client::moneyPut(unsigned long amount) {
+    _balance += amount;
+}
+
+void Client::moneyGet(unsigned long amount) {
+    _balance -= amount;
+}
+
 bool Client::operator<(const Client &client) const {
     return client._id < _id;
 }

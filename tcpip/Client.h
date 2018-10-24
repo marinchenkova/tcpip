@@ -18,7 +18,7 @@ private:
     bool _logged = false;
     string _login;
     string _password;
-    int _balance = 0;
+    unsigned long _balance = 0;
     string _id;
     int _socket;
 
@@ -29,9 +29,11 @@ public:
     void log_in(int socket);
     void detach();
     void logout();
+    void moneyPut(unsigned long amount);
+    void moneyGet(unsigned long amount);
     string getLogin() { return _login; }
     string getPassword() { return _password; }
-    int getBalance() { return _balance; }
+    unsigned long getBalance() { return _balance; }
     string getId() { return _id; }
     int getSocket() { return _socket; }
     bool isRegistered() { return _registered; }

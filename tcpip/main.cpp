@@ -54,16 +54,16 @@ int createSocket(struct sockaddr_in *local, const char *addr, u_short port) {
 
 
 void printlnMsg(int socket, char *arr, int size) {
-    printf("Client socket %d/>", socket);
+    printf("Client socket %d/>[", socket);
     for (int i = 0; i < size; i++) {
         printf( "%c", arr[i] );
     }
-    printf("\n");
+    printf("]\n");
 }
 
 
 void send(string response) {
-    cout << response << endl;
+    cout << "[" << response << "]" << endl;
 }
 
 
@@ -103,7 +103,7 @@ int checkListen(int *ss, int backlog) {
         cerr << "Error calling LISTEN" << endl;
         return 0;
     }
-    cout << "Socket " << *ss << " created" << endl;
+    cout << "Server on socket " << *ss << " started" << endl;
     return l;
 }
 

@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include "Command.h"
 
 
@@ -41,33 +42,61 @@ string Command::response(set<Client>& clientSet, int socket) {
     switch(code) {
         case CMD_ACCOUNT_ID:
         {
-            if (client->isRegistered() && client->loggedIn()) {
-                responseCode = RESPONSE_OK;
-                responseData = wrapData(client->getId(), CMD_DATA_SIZE, "0", true);
-            }
-            else {
+            if (!client->isRegistered() || !client->loggedIn()) {
                 responseCode = RESPONSE_NEED_LOGIN;
                 responseData = NEED_LOGIN_STR;
+                break;
             }
+
+            responseCode = RESPONSE_OK;
+            responseData = wrapData(client->getId(), CMD_DATA_SIZE, "0", true);
             break;
         }
 
         case CMD_BALANCE:
         {
-            if (client->isRegistered() && client->loggedIn()) {
-                responseCode = RESPONSE_OK;
-                responseData = wrapData(client->getBalance(), CMD_DATA_SIZE, " ", false);
-            }
-            else {
+            if (!client->isRegistered() || !client->loggedIn()) {
                 responseCode = RESPONSE_NEED_LOGIN;
                 responseData = NEED_LOGIN_STR;
+                break;
             }
+
+            responseCode = RESPONSE_OK;
+            responseData = wrapBalance(client->getBalance());
             break;
         }
 
         case CMD_CLIENTS:
 
             break;
+
+        case CMD_GET:
+        {
+            if (!client->isRegistered() || !client->loggedIn()) {
+                responseCode = RESPONSE_NEED_LOGIN;
+                responseData = NEED_LOGIN_STR;
+                break;
+            }
+
+            if (!isNumber(trim(data))) {
+                responseCode = RESPONSE_INPUT_INCORRECT;
+                responseData = NEED_NUMBER_STR;
+                break;
+            }
+
+            unsigned long amount = extractInt(0, CMD_DATA_SIZE);
+            cout << "amount " << amount << endl;
+            if (client->getBalance() < amount) {
+                responseCode = RESPONSE_INPUT_INCORRECT;
+                responseData = INSUF_FUNDS_STR;
+                break;
+            }
+
+            client->moneyGet(amount);
+            responseCode = RESPONSE_OK;
+            responseData = wrapBalance(client->getBalance());
+            break;
+        }
 
         case CMD_LOGIN:
         {
@@ -77,14 +106,14 @@ string Command::response(set<Client>& clientSet, int socket) {
             // If client not exists
             if (registered == NULL) {
                 responseCode = RESPONSE_INPUT_INCORRECT;
-                responseData = INPUT_INCORRECT_STR;
+                responseData = LOGIN_INCORRECT_STR;
                 break;
             }
 
             // Client exists (also log_in was correct), check if password is incorrect
             if (registered->getPassword() != word2) {
                 responseCode = RESPONSE_INPUT_INCORRECT;
-                responseData = INPUT_INCORRECT_STR;
+                responseData = PASS_INCORRECT_STR;
                 break;
             }
 
@@ -105,7 +134,7 @@ string Command::response(set<Client>& clientSet, int socket) {
             // Found client socket is not passed socket
             registered->log_in(socket);
             responseCode = RESPONSE_OK;
-            responseData = wrapData("Welcome " + registered->getLogin(), CMD_DATA_SIZE, " ", false);
+            responseData = wrapWelcome(registered->getLogin());
             break;
         }
 
@@ -113,7 +142,7 @@ string Command::response(set<Client>& clientSet, int socket) {
         {
             if (client->loggedIn()) {
                 responseCode = RESPONSE_OK;
-                responseData = wrapData("Good bye " + client->getLogin(), CMD_DATA_SIZE, " ", false);
+                responseData = wrapBye(client->getLogin());
                 client->logout();
                 break;
             }
@@ -127,6 +156,28 @@ string Command::response(set<Client>& clientSet, int socket) {
 
             break;
 
+        case CMD_PUT:
+        {
+            if (!client->isRegistered() || !client->loggedIn()) {
+                responseCode = RESPONSE_NEED_LOGIN;
+                responseData = NEED_LOGIN_STR;
+                break;
+            }
+
+            if (!isNumber(trim(data))) {
+                responseCode = RESPONSE_INPUT_INCORRECT;
+                responseData = NEED_NUMBER_STR;
+                break;
+            }
+
+            unsigned long amount = extractInt(0, CMD_DATA_SIZE);
+
+            client->moneyPut(amount);
+            responseCode = RESPONSE_OK;
+            responseData = wrapBalance(client->getBalance());
+            break;
+        }
+
         case CMD_REGISTER:
         {
             // If client is already logged in
@@ -139,14 +190,14 @@ string Command::response(set<Client>& clientSet, int socket) {
             // If login is incorrect
             if (word1.empty()) {
                 responseCode = RESPONSE_INPUT_INCORRECT;
-                responseData = INPUT_INCORRECT_STR;
+                responseData = LOGIN_INCORRECT_STR;
                 break;
             }
 
             // If password is incorrect
             if (word2.empty()) {
                 responseCode = RESPONSE_INPUT_INCORRECT;
-                responseData = INPUT_INCORRECT_STR;
+                responseData = PASS_INCORRECT_STR;
                 break;
             }
 
@@ -161,10 +212,10 @@ string Command::response(set<Client>& clientSet, int socket) {
             client->registerMe(
                     word1,
                     word2,
-                    wrapData(numRegistered(clientSet), MAX_WORD_SIZE, "0", true)
+                    wrapData((unsigned long) numRegistered(clientSet), MAX_WORD_SIZE, "0", true)
             );
             responseCode = RESPONSE_OK;
-            responseData = wrapData("Welcome " + client->getLogin(), CMD_DATA_SIZE, " ", false);
+            responseData = wrapWelcome(client->getLogin());
             break;
         }
 
@@ -192,16 +243,35 @@ string Command::extractWord(unsigned int start, unsigned int end) {
     return word;
 }
 
+unsigned long Command::extractInt(unsigned int start, unsigned int end) {
+    string word = trim(data.substr(start, end));
+    if (word.length() > MAX_WORD_SIZE - 10) word = word.substr(0, MAX_WORD_SIZE - 10);
+    return strtoul(word.c_str(), NULL, 0);
+}
+
 string Command::wrapData(string data, int size, string wrap, bool start) {
     string rest = "";
     for (int i = 0; i < size - data.length(); i++) rest.append(wrap);
     return start ? rest + data : data + rest;
 }
 
-string Command::wrapData(int data, int size, string wrap, bool start) {
+string Command::wrapData(unsigned long data, int size, string wrap, bool start) {
     stringstream ss;
     ss << data;
     return wrapData(ss.str(), size, wrap, start);
+}
+
+string Command::wrapBalance(unsigned long balance) {
+    string remained = "Remained " + wrapData(balance, MAX_WORD_SIZE, "", false);
+    return wrapData(remained, CMD_DATA_SIZE, " ", false);
+}
+
+string Command::wrapWelcome(string login) {
+    return wrapData("Welcome " + login, CMD_DATA_SIZE, " ", false);
+}
+
+string Command::wrapBye(string login) {
+    return wrapData("Good bye " + login, CMD_DATA_SIZE, " ", false);
 }
 
 string trim(const std::string &s) {
