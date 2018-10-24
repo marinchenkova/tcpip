@@ -3,8 +3,8 @@
 
 
 Command::Command(string cmd) {
-    code = cmd[0];
-    data = cmd.substr(1, CMD_DATA_SIZE);
+    code = cmd[1];
+    data = cmd.substr(2, CMD_DATA_SIZE);
     checkData();
 }
 

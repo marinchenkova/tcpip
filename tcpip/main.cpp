@@ -54,7 +54,7 @@ int createSocket(struct sockaddr_in *local, const char *addr, u_short port) {
 
 
 void printlnMsg(int socket, char *arr, int size) {
-    printf("Client socket %d/>[", socket);
+    printf("Client socket %d/>", socket);
     for (int i = 0; i < size; i++) {
         printf( "%c", arr[i] );
     }
@@ -68,14 +68,14 @@ void send(string response) {
 
 
 bool readn(int n, int socket) {
-    char buf[CMD_SIZE];
+    char buf[CMD_SIZE + 1];
     int rc = 0;
     int fill = 0;
 
     while (fill < n) {
         rc = recv(socket, buf + fill, n - fill, 0);
         if (rc <= 0) return false;
-        fill += rc;
+        if (buf[0] == PREFIX) fill += rc;
     }
 
     printlnMsg(socket, buf, n);
@@ -129,7 +129,7 @@ void kick(int socket) {
         else clientSet.erase(*client);
         cout << "Client on socket " << socket << " exited" << endl;
     }
-    cout << "No such client" << endl;
+    else cout << "No such client" << endl;
     ReleaseMutex(hMutex);
 }
 
@@ -157,7 +157,7 @@ DWORD WINAPI receiveThread(CONST LPVOID lpParam) {
     cout << endl << "Client on socket " << data->socket << " joined" << endl;
     ReleaseMutex(hMutex);
 
-    while (readn(CMD_SIZE, data->socket)) {}
+    while (readn(CMD_SIZE + 1, data->socket)) {}
 
     kick(data->socket);
     ExitThread(0);

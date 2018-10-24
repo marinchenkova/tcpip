@@ -15,6 +15,9 @@ static const unsigned int MIN_WORD_SIZE = 4;
 static const unsigned int CMD_DATA_SIZE = 40;
 static const unsigned int CMD_SIZE = CMD_DATA_SIZE + 1;
 
+static const char PREFIX = '[';
+static const char POSTFIX = ']';
+
 static const char CMD_ACCOUNT_ID = '0';
 static const char CMD_BALANCE    = '1';
 static const char CMD_CLIENTS    = '2';
