@@ -44,10 +44,8 @@ Client::operator string() const {
     ss << _socket;
     return "Socket" + ss.str() + "<" +
             (_registered
-             ? ("LOGIN:" + _login + " ID:" + _id + (_logged
-                                                     ? " online"
-                                                     : " offline"))
-             : "(NOT REGISTERED)") + ">";
+             ? ("LOGIN[" + _login + "] ID[" + _id + "]" + (_logged ? " ONLINE" : " OFFLINE"))
+             : "NOT REGISTERED") + ">";
 }
 
 ostream &operator<<(ostream &os, const Client &client) {

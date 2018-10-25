@@ -38,11 +38,11 @@ string Command::response(set<Client>& clientSet, int socket) {
     string word1 = extractWord(0, MAX_WORD_SIZE);
     string word2 = extractWord(MAX_WORD_SIZE, CMD_DATA_SIZE);
 
-    cout << *client << " requests: ";
+    cout << *client << " requests ";
     switch(code) {
         case CMD_ACCOUNT_ID:
         {
-            cout << "ACCOUNT_ID" << endl;
+            cout << "ACCOUNT ID" << endl;
             if (!client->isRegistered() || !client->loggedIn()) {
                 responseCode = RESPONSE_NEED_LOGIN;
                 responseData = NEED_LOGIN_STR;
@@ -130,7 +130,7 @@ string Command::response(set<Client>& clientSet, int socket) {
 
         case CMD_LOGIN:
         {
-            cout << "LOG IN login:" << word1 << ", password:" << word2 << endl;
+            cout << "LOG IN LOGIN[" << word1 << "] PASSWORD[" << word2 << "]" << endl;
             // Find out if such client exists
             Client* registered = getClient(clientSet, word1);
 
@@ -166,6 +166,7 @@ string Command::response(set<Client>& clientSet, int socket) {
             registered->log_in(socket);
             responseCode = RESPONSE_OK;
             responseData = wrapWelcome(registered->getLogin());
+            cout << *registered << " logged in" << endl;
             break;
         }
 
@@ -176,6 +177,7 @@ string Command::response(set<Client>& clientSet, int socket) {
                 responseCode = RESPONSE_OK;
                 responseData = wrapBye(client->getLogin());
                 client->logout();
+                cout << *client << " logged out" << endl;
                 break;
             }
 
@@ -245,7 +247,7 @@ string Command::response(set<Client>& clientSet, int socket) {
 
         case CMD_REGISTER:
         {
-            cout << "REGISTRATION login:" << word1 << ", password:" << word2 << endl;
+            cout << "REGISTRATION LOGIN[" << word1 << "] PASSWORD[" << word2 << "]" << endl;
             // If client is already logged in
             if (client->loggedIn()) {
                 responseCode = RESPONSE_NEED_LOGOUT;
@@ -282,6 +284,7 @@ string Command::response(set<Client>& clientSet, int socket) {
             );
             responseCode = RESPONSE_OK;
             responseData = wrapWelcome(client->getLogin());
+            cout << *client << " registered" << endl;
             break;
         }
 
@@ -293,7 +296,7 @@ string Command::response(set<Client>& clientSet, int socket) {
             break;
         }
     }
-    cout << "Responding: " << responseData << endl << endl;
+    cout << "Responding[" << responseData << "]" << endl << endl;
     stringstream ss;
     ss << PREFIX << responseCode;
     return ss.str() + responseData;
