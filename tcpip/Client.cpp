@@ -42,12 +42,12 @@ bool Client::operator<(const Client &client) const {
 Client::operator string() const {
     stringstream ss;
     ss << _socket;
-    return "Socket " + ss.str() + ": " +
+    return "Socket" + ss.str() + "<" +
             (_registered
-             ? ("LOGIN " + _login + " ID " + _id  + (_logged
+             ? ("LOGIN:" + _login + " ID:" + _id + (_logged
                                                      ? " online"
                                                      : " offline"))
-             : "(NOT REGISTERED)");
+             : "(NOT REGISTERED)") + ">";
 }
 
 ostream &operator<<(ostream &os, const Client &client) {

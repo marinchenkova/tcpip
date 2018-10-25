@@ -38,9 +38,11 @@ string Command::response(set<Client>& clientSet, int socket) {
     string word1 = extractWord(0, MAX_WORD_SIZE);
     string word2 = extractWord(MAX_WORD_SIZE, CMD_DATA_SIZE);
 
+    cout << *client << " requests: ";
     switch(code) {
         case CMD_ACCOUNT_ID:
         {
+            cout << "ACCOUNT_ID" << endl;
             if (!client->isRegistered() || !client->loggedIn()) {
                 responseCode = RESPONSE_NEED_LOGIN;
                 responseData = NEED_LOGIN_STR;
@@ -54,6 +56,7 @@ string Command::response(set<Client>& clientSet, int socket) {
 
         case CMD_BALANCE:
         {
+            cout << "BALANCE" << endl;
             if (!client->isRegistered() || !client->loggedIn()) {
                 responseCode = RESPONSE_NEED_LOGIN;
                 responseData = NEED_LOGIN_STR;
@@ -67,15 +70,18 @@ string Command::response(set<Client>& clientSet, int socket) {
 
         case CMD_CLIENTS:
         {
+            cout << "CLIENT LIST";
             if (trim(word1) == START_ITER_C_STR) {
                 responseCode = RESPONSE_CLIENTS;
                 responseData = wrapData((unsigned long) numRegistered(clientSet), CMD_DATA_SIZE, " ", false);
+                cout << " SIZE" << endl;
                 break;
             }
 
             if (!isNumber(word1)) {
                 responseCode = RESPONSE_INPUT_INCORRECT;
                 responseData = NEED_NUMBER_STR;
+                cout << endl;
                 break;
             }
 
@@ -84,16 +90,19 @@ string Command::response(set<Client>& clientSet, int socket) {
             if (need == NULL) {
                 responseCode = RESPONSE_CLIENTS;
                 responseData = wrapData(FINISH_ITER_C_STR, CMD_DATA_SIZE, " ", false);
+                cout << endl;
                 break;
             }
 
             responseCode = RESPONSE_OK;
             responseData = wrapData(need->getLogin(), CMD_DATA_SIZE, " ", false);
+            cout << " NEXT" << endl;
             break;
         }
 
         case CMD_GET:
         {
+            cout << "MONEY GET " << trim(data) << endl;
             if (!client->isRegistered() || !client->loggedIn()) {
                 responseCode = RESPONSE_NEED_LOGIN;
                 responseData = NEED_LOGIN_STR;
@@ -121,6 +130,7 @@ string Command::response(set<Client>& clientSet, int socket) {
 
         case CMD_LOGIN:
         {
+            cout << "LOG IN login:" << word1 << ", password:" << word2 << endl;
             // Find out if such client exists
             Client* registered = getClient(clientSet, word1);
 
@@ -161,6 +171,7 @@ string Command::response(set<Client>& clientSet, int socket) {
 
         case CMD_LOGOUT:
         {
+            cout << "LOG OUT" << endl;
             if (client->loggedIn()) {
                 responseCode = RESPONSE_OK;
                 responseData = wrapBye(client->getLogin());
@@ -175,6 +186,7 @@ string Command::response(set<Client>& clientSet, int socket) {
 
         case CMD_PAY_TO:
         {
+            cout << "PAY " << word2 << " TO " << word1 << endl;
             if (!client->isRegistered() || !client->loggedIn()) {
                 responseCode = RESPONSE_NEED_LOGIN;
                 responseData = NEED_LOGIN_STR;
@@ -210,6 +222,7 @@ string Command::response(set<Client>& clientSet, int socket) {
 
         case CMD_PUT:
         {
+            cout << "MONEY PUT " << trim(data) << endl;
             if (!client->isRegistered() || !client->loggedIn()) {
                 responseCode = RESPONSE_NEED_LOGIN;
                 responseData = NEED_LOGIN_STR;
@@ -232,6 +245,7 @@ string Command::response(set<Client>& clientSet, int socket) {
 
         case CMD_REGISTER:
         {
+            cout << "REGISTRATION login:" << word1 << ", password:" << word2 << endl;
             // If client is already logged in
             if (client->loggedIn()) {
                 responseCode = RESPONSE_NEED_LOGOUT;
@@ -273,11 +287,13 @@ string Command::response(set<Client>& clientSet, int socket) {
 
         default:
         {
+            cout << "UNKNOWN COMMAND" << endl;
             responseCode = RESPONSE_UNKNOWN_CMD;
             responseData = UNKNOWN_CMD_STR;
             break;
         }
     }
+    cout << "Responding: " << responseData << endl << endl;
     stringstream ss;
     ss << PREFIX << responseCode;
     return ss.str() + responseData;

@@ -36,15 +36,15 @@ static const char RESPONSE_NEED_LOGOUT     = 'n';
 static const char RESPONSE_OK              = 'o';
 static const char RESPONSE_UNKNOWN_CMD     = 'u';
 
-static const string BAD_DATA_STR        = "ERROR  broken data  please retry sending";
-static const string LOGIN_INCORRECT_STR = "ERROR  login incorrect input            ";
-static const string PASS_INCORRECT_STR  = "ERROR  password incorrect input         ";
+static const string BAD_DATA_STR        = "ERROR Broken data  please retry sending ";
+static const string LOGIN_INCORRECT_STR = "ERROR Login incorrect input             ";
+static const string PASS_INCORRECT_STR  = "ERROR Password incorrect input          ";
 static const string LOGIN_BUSY_STR      = "Login is busy                           ";
 static const string INSUF_FUNDS_STR     = "Insufficient funds                      ";
 static const string NEED_LOGIN_STR      = "You need to log in                      ";
 static const string NEED_LOGOUT_STR     = "You are already logged in               ";
-static const string NEED_NUMBER_STR     = "ERROR  need number                      ";
-static const string UNKNOWN_CMD_STR     = "ERROR  unknown command                  ";
+static const string NEED_NUMBER_STR     = "ERROR Need number                       ";
+static const string UNKNOWN_CMD_STR     = "ERROR Unknown command                   ";
 
 static const string START_ITER_C_STR = "START";
 static const string FINISH_ITER_C_STR = "FINISH";

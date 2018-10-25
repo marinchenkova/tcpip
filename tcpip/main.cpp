@@ -62,8 +62,21 @@ void printlnMsg(int socket, char *arr, int size) {
 }
 
 
-void send(string response) {
-    cout << response << "]" << endl;
+bool send(string response, int socket) {
+    const char* resparr;
+    resparr = response.c_str();
+
+    int rc = 0;
+    int l = response.length();
+    int i = 0;
+
+    while (i < l) {
+        rc = send(socket, resparr + i, l - i, 0);
+        if (rc <= 0) return false;
+        i += rc;
+    }
+
+    return true;
 }
 
 
@@ -77,14 +90,14 @@ bool readn(int n, int socket) {
         if (rc <= 0) return false;
         if (buf[fill] == PREFIX) fill = 0;
         if (buf[0] == PREFIX) fill += rc;
-
     }
 
-    printlnMsg(socket, buf, n);
+    //printlnMsg(socket, buf, n);
 
     WaitForSingleObject(hMutex, INFINITE);
-    send(Command(buf).response(clientSet, socket));
+    while (!send(Command(buf).response(clientSet, socket), socket));
     ReleaseMutex(hMutex);
+
     return true;
 }
 
@@ -115,7 +128,7 @@ void listClients() {
     for (set<Client>::iterator it = clientSet.begin(); it != clientSet.end(); ++it) {
         cout << (*it) << endl;
     }
-    if (clientSet.size() == 0) cout << "No clients" << endl;
+    if (clientSet.size() == 0) cout << "No clients" << endl << endl;
     ReleaseMutex(hMutex);
 }
 
@@ -129,9 +142,9 @@ void kick(int socket) {
         client->detach();
         if (client->isRegistered()) client->logout();
         else clientSet.erase(*client);
-        cout << "Client on socket " << socket << " exited" << endl;
+        cout << "Client on socket " << socket << " exited" << endl << endl;
     }
-    else cout << "No such client" << endl;
+    else cout << "No such client" << endl << endl;
     ReleaseMutex(hMutex);
 }
 
@@ -156,10 +169,10 @@ DWORD WINAPI receiveThread(CONST LPVOID lpParam) {
     CONST PCDATA data = (PCDATA) lpParam;
 
     WaitForSingleObject(hMutex, INFINITE);
-    cout << endl << "Client on socket " << data->socket << " joined" << endl;
+    cout << endl << "Client on socket " << data->socket << " joined" << endl << endl;
     ReleaseMutex(hMutex);
 
-    while (readn(CMD_SIZE + 1, data->socket)) {}
+    while (readn(CMD_SIZE + 1, data->socket));
 
     kick(data->socket);
     ExitThread(0);
