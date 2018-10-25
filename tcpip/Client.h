@@ -9,9 +9,6 @@
 using namespace std;
 
 
-static const int MAX_WORD_SIZE = 20;
-
-
 class Client {
 private:
     bool _registered = false;
@@ -43,7 +40,7 @@ public:
 };
 
 Client* getClient(set<Client>& clientSet, int socket);
-Client* getClient(set<Client>& clientSet, string login);
+Client* getClient(set<Client>& clientSet, string id);
 Client* getClientByIndex(set<Client> &clientSet, int index);
 int numRegistered(set<Client> &clientSet);
 bool loginBusy(set<Client>& clientSet, string login);

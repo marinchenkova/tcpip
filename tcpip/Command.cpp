@@ -1,4 +1,3 @@
-#include <cstdlib>
 #include "Command.h"
 
 
@@ -95,7 +94,7 @@ string Command::response(set<Client>& clientSet, int socket) {
             }
 
             responseCode = RESPONSE_OK;
-            responseData = wrapData(need->getLogin(), CMD_DATA_SIZE, " ", false);
+            responseData = wrapData(need->getId(), CMD_DATA_SIZE, " ", false);
             cout << " NEXT" << endl;
             break;
         }

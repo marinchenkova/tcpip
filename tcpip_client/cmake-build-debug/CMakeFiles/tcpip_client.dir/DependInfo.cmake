@@ -4,7 +4,8 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "D:/Users/Valentin/CLionProjects/tcpip_client/main.cpp" "D:/Users/Valentin/CLionProjects/tcpip_client/cmake-build-debug/CMakeFiles/tcpip_client.dir/main.cpp.obj"
+  "D:/Users/Valentin/CLionProjects/tcpip_git/tcpip_client/Command.cpp" "D:/Users/Valentin/CLionProjects/tcpip_git/tcpip_client/cmake-build-debug/CMakeFiles/tcpip_client.dir/Command.cpp.obj"
+  "D:/Users/Valentin/CLionProjects/tcpip_git/tcpip_client/main.cpp" "D:/Users/Valentin/CLionProjects/tcpip_git/tcpip_client/cmake-build-debug/CMakeFiles/tcpip_client.dir/main.cpp.obj"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

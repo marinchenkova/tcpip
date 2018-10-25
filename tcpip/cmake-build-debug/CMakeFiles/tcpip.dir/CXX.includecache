@@ -21,8 +21,6 @@ set
 -
 
 D:/Users/Valentin/CLionProjects/tcpip_git/tcpip/Command.cpp
-cstdlib
--
 Command.h
 D:/Users/Valentin/CLionProjects/tcpip_git/tcpip/Command.h
 
@@ -39,6 +37,8 @@ sstream
 -
 Client.h
 D:/Users/Valentin/CLionProjects/tcpip_git/tcpip/Client.h
+cstdlib
+-
 
 D:/Users/Valentin/CLionProjects/tcpip_git/tcpip/main.cpp
 windows.h

@@ -3,5 +3,5 @@ project(tcpip_client)
 
 set(CMAKE_CXX_STANDARD 11)
 link_libraries(ws2_32 wsock32)
-set(SOURCE_FILES main.cpp)
-add_executable(tcpip_client ${SOURCE_FILES})
+set(SOURCE_FILES main.cpp Command.cpp Command.h)
+add_executable(tcpip_client ${SOURCE_FILES} Command.cpp Command.h)

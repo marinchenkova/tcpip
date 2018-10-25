@@ -27,7 +27,6 @@ typedef struct ClientData {
     int *addrlen;
 } CDATA, *PCDATA;
 
-
 // Initialize Winsock
 int initWinsock() {
     WSADATA wsaData;
@@ -38,7 +37,6 @@ int initWinsock() {
     }
     return 0;
 }
-
 
 int createSocket(struct sockaddr_in *local, const char *addr, u_short port) {
     local -> sin_family = AF_INET;
@@ -51,16 +49,6 @@ int createSocket(struct sockaddr_in *local, const char *addr, u_short port) {
     }
     return ss;
 }
-
-
-void printlnMsg(int socket, char *arr, int size) {
-    printf("Client socket %d/>", socket);
-    for (int i = 0; i < size; i++) {
-        printf( "%c", arr[i] );
-    }
-    printf("]\n");
-}
-
 
 bool send(string response, int socket) {
     const char* resparr;
@@ -78,7 +66,6 @@ bool send(string response, int socket) {
 
     return true;
 }
-
 
 bool readn(int n, int socket) {
     char buf[CMD_SIZE + 1];
@@ -101,9 +88,8 @@ bool readn(int n, int socket) {
     return true;
 }
 
-
-int checkBind(int *ss, struct sockaddr_in local) {
-    int b = bind(*ss, (struct sockaddr *) &local, sizeof(local));
+int checkBind(int ss, struct sockaddr_in local) {
+    int b = bind(ss, (struct sockaddr *) &local, sizeof(local));
     if (b < 0) {
         cerr << "Error calling BIND" << endl;
         exit(1);
@@ -111,14 +97,13 @@ int checkBind(int *ss, struct sockaddr_in local) {
     return b;
 }
 
-
-int checkListen(int *ss, int backlog) {
-    int l = listen(*ss, backlog);
+int checkListen(int ss, int backlog) {
+    int l = listen(ss, backlog);
     if (l) {
         cerr << "Error calling LISTEN" << endl;
         return 0;
     }
-    cout << "Server on socket " << *ss << " started" << endl;
+    cout << "Server on socket " << ss << " started" << endl;
     return l;
 }
 
@@ -131,7 +116,6 @@ void listClients() {
     if (clientSet.size() == 0) cout << "No clients" << endl << endl;
     ReleaseMutex(hMutex);
 }
-
 
 void kick(int socket) {
     WaitForSingleObject(hMutex, INFINITE);
@@ -147,7 +131,6 @@ void kick(int socket) {
     else cout << "No such client" << endl << endl;
     ReleaseMutex(hMutex);
 }
-
 
 void kickAll(map<int, HANDLE> clientThreadMap) {
     WaitForSingleObject(hMutex, INFINITE);
@@ -216,17 +199,15 @@ DWORD WINAPI acceptThread(CONST LPVOID lpParam) {
     ExitThread(0);
 }
 
-
 int main() {
-
     struct sockaddr_in local;
     PCDATA acceptThreadData = new ClientData();
     int ss;
 
     initWinsock();
     ss = createSocket(&local, ADDR, PORT);
-    checkBind(&ss, local);
-    checkListen(&ss, 5);
+    checkBind(ss, local);
+    checkListen(ss, 5);
 
     hMutex = CreateMutex(NULL, FALSE, NULL);
 

@@ -7,11 +7,13 @@
 #include <string>
 #include <sstream>
 #include "Client.h"
+#include <cstdlib>
 
 using namespace std;
 
 
 static const unsigned int MIN_WORD_SIZE = 4;
+static const unsigned int MAX_WORD_SIZE = 20;
 static const unsigned int CMD_DATA_SIZE = 40;
 static const unsigned int CMD_SIZE = CMD_DATA_SIZE + 1;
 
