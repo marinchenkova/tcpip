@@ -311,7 +311,7 @@ string Command::response(set<Client>& clientSet, int socket) {
             break;
         }
     }
-    cout << "Responding[" << responseData << "]" << endl << endl;
+    cout << "Responding: " << responseData << endl << endl;
     stringstream ss;
     ss << PREFIX << responseCode;
     return ss.str() + responseData;

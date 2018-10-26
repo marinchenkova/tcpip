@@ -1,4 +1,5 @@
 #include <windows.h>
+#include <winsock2.h>
 #include <stdio.h>
 #include <iostream>
 #include <thread>
@@ -50,7 +51,9 @@ int createSocket(struct sockaddr_in *local, const char *addr, u_short port) {
     return ss;
 }
 
-bool send(string response, int socket) {
+bool send(Command cmd, int socket) {
+    string response = cmd.response(clientSet, socket);
+
     const char* resparr;
     resparr = response.c_str();
 
@@ -79,10 +82,8 @@ bool readn(int n, int socket) {
         if (buf[0] == PREFIX) fill += rc;
     }
 
-    //printlnMsg(socket, buf, n);
-
     WaitForSingleObject(hMutex, INFINITE);
-    while (!send(Command(buf).response(clientSet, socket), socket));
+    while (!send(Command(buf), socket));
     ReleaseMutex(hMutex);
 
     return true;

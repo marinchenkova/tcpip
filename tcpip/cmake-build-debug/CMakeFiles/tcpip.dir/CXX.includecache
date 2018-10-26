@@ -19,6 +19,10 @@ iostream
 -
 set
 -
+windows.h
+-
+winsock2.h
+-
 
 D:/Users/Valentin/CLionProjects/tcpip_git/tcpip/Command.cpp
 Command.h
@@ -42,6 +46,8 @@ cstdlib
 
 D:/Users/Valentin/CLionProjects/tcpip_git/tcpip/main.cpp
 windows.h
+-
+winsock2.h
 -
 stdio.h
 -

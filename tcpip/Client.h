@@ -5,6 +5,8 @@
 #include <string>
 #include <iostream>
 #include <set>
+#include <windows.h>
+#include <winsock2.h>
 
 using namespace std;
 

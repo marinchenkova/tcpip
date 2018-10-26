@@ -5,6 +5,7 @@
 #include <winsock2.h>
 #include <conio.h>
 #include <vector>
+#include <algorithm>
 #include "Command.h"
 
 using namespace std;
@@ -146,6 +147,7 @@ int main() {
     cin >> port;
     cout << endl;
 */
+
     stringstream ss;
     ss << addr << ":" << port;
     string addrport = ss.str();
