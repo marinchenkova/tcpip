@@ -50,7 +50,9 @@ int createSocket(struct sockaddr_in *local, const char *addr, u_short port) {
 }
 
 bool send(Command cmd, int socket) {
+    WaitForSingleObject(hMutex, INFINITE);
     string response = cmd.response(clientSet, socket);
+    ReleaseMutex(hMutex);
 
     int notifySocket = cmd.notify();
     if (notifySocket > 0) {
@@ -91,9 +93,7 @@ bool readn(int n, int socket) {
         if (buf[0] == PREFIX) fill += rc;
     }
 
-    WaitForSingleObject(hMutex, INFINITE);
     while (!send(Command(buf), socket));
-    ReleaseMutex(hMutex);
 
     return true;
 }
@@ -120,35 +120,43 @@ int checkListen(int ss, int backlog) {
 
 void listClients() {
     WaitForSingleObject(hMutex, INFINITE);
+    cout << "Current clients:" << endl;
     for (set<Client>::iterator it = clientSet.begin(); it != clientSet.end(); ++it) {
         cout << (*it) << endl;
     }
-    if (clientSet.size() == 0) cout << "No clients" << endl << endl;
+    if (clientSet.size() == 0) cout << "No clients" << endl;
     ReleaseMutex(hMutex);
 }
 
 void kick(int socket) {
     WaitForSingleObject(hMutex, INFINITE);
+    cout << "Kicking " << socket << endl;
     Client* client = getClient(clientSet, socket);
     if (client != NULL) {
         shutdown(socket, 2);
         closesocket(socket);
-        client->detach();
-        if (client->isRegistered()) client->logout();
+        if (client->isRegistered()) {
+            client->logout();
+            client->detach();
+        }
         else clientSet.erase(*client);
-        cout << "Client on socket " << socket << " exited" << endl << endl;
+        cout << "Client on socket " << socket << " exited" << endl;
     }
-    else cout << "No such client" << endl << endl;
+    else cout << "No such client" << endl;
     ReleaseMutex(hMutex);
 }
 
 void kickAll(map<int, HANDLE> clientThreadMap) {
     WaitForSingleObject(hMutex, INFINITE);
     for (set<Client>::iterator it = clientSet.begin(); it != clientSet.end(); ++it) {
-        int socket = ((Client) (*it)).getSocket();
+        Client* client = (Client *) &(*it);
+        int socket = client->getSocket();
 
-        if (((Client) (*it)).isRegistered()) ((Client) (*it)).logout();
-        else clientSet.erase(((Client) (*it)));
+        if (client->isRegistered()) {
+            client->logout();
+            client->detach();
+        }
+        else clientSet.erase(*client);
 
         shutdown(socket, 2);
         closesocket(socket);
@@ -162,10 +170,11 @@ DWORD WINAPI receiveThread(CONST LPVOID lpParam) {
     CONST PCDATA data = (PCDATA) lpParam;
 
     WaitForSingleObject(hMutex, INFINITE);
-    cout << endl << "Client on socket " << data->socket << " joined" << endl << endl;
+    cout << endl << "Client on socket " << data->socket << " joined" << endl;
     ReleaseMutex(hMutex);
 
     while (readn(CMD_SIZE + 1, data->socket));
+    cout << endl;
 
     kick(data->socket);
     ExitThread(0);
@@ -233,25 +242,27 @@ int main() {
 
     char cmd;
     bool cont = true;
-    int ks;
+    string ks;
     while (cont) {
         cin >> cmd;
         switch (cmd) {
             case LIST:
-                cout << "Current clients:" << endl;
                 listClients();
                 break;
 
             case KICK:
+                WaitForSingleObject(hMutex, INFINITE);
                 cout << "Enter client socket to kick: ";
                 cin >> ks;
-                kick(ks);
+                ReleaseMutex(hMutex);
+                kick(strtol(ks.c_str(), NULL, 0));
                 break;
 
             case EXIT:
                 shutdown(ss, 2);
                 closesocket(ss);
                 WaitForSingleObject(hAcceptThread, INFINITE);
+                WaitForSingleObject(hMutex, INFINITE);
                 CloseHandle(hAcceptThread);
                 CloseHandle(hMutex);
                 cont = false;
@@ -259,7 +270,9 @@ int main() {
                 break;
 
             default:
+                WaitForSingleObject(hMutex, INFINITE);
                 cout << cmd << ": unknown command" << endl;
+                ReleaseMutex(hMutex);
                 break;
         }
     }

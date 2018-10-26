@@ -79,15 +79,12 @@ string Command::response(set<Client>& clientSet, int socket) {
 
             unsigned long index = extractULong(0, CMD_DATA_SIZE);
             Client* need = getClientByIndex(clientSet, (int) index);
-            if (need == NULL) {
-                responseCode = RESPONSE_CLIENTS;
-                responseData = wrapData(FINISH_ITER_C_STR, CMD_DATA_SIZE, " ", false);
-                cout << endl;
-                break;
-            }
+            string id;
+            if (need == NULL) id = FINISH_ITER_C_STR;
+            else id = need->getId();
 
             responseCode = RESPONSE_CLIENTS;
-            responseData = wrapData(need->getId(), CMD_DATA_SIZE, " ", false);
+            responseData = wrapData(id, CMD_DATA_SIZE, " ", false);
             cout << " NEXT" << endl;
             break;
         }
