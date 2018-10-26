@@ -23,7 +23,7 @@ private:
 
 public:
     Client(int socket);
-    bool loggedIn() { return _logged > 0; }
+    bool online() { return _logged; }
     void registerMe(string login, string password, string id);
     void log_in(int socket);
     void detach();

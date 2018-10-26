@@ -47,8 +47,6 @@ cstdlib
 D:/Users/Valentin/CLionProjects/tcpip_git/tcpip/main.cpp
 windows.h
 -
-winsock2.h
--
 stdio.h
 -
 iostream
@@ -61,6 +59,4 @@ map
 -
 Command.h
 D:/Users/Valentin/CLionProjects/tcpip_git/tcpip/Command.h
-Client.h
-D:/Users/Valentin/CLionProjects/tcpip_git/tcpip/Client.h
 

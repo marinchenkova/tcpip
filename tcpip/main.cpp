@@ -1,12 +1,10 @@
 #include <windows.h>
-#include <winsock2.h>
 #include <stdio.h>
 #include <iostream>
 #include <thread>
 #include <set>
 #include <map>
 #include "Command.h"
-#include "Client.h"
 
 #pragma comment(lib, "ws2_32.lib")
 using namespace std;
@@ -53,6 +51,17 @@ int createSocket(struct sockaddr_in *local, const char *addr, u_short port) {
 
 bool send(Command cmd, int socket) {
     string response = cmd.response(clientSet, socket);
+
+    int notifySocket = cmd.notify();
+    if (notifySocket > 0) {
+        string notifycmd = {PREFIX, CMD_BALANCE};
+        send(Command(Command::wrapData(
+                notifycmd,
+                CMD_DATA_SIZE,
+                " ",
+                false
+        )), notifySocket);
+    }
 
     const char* resparr;
     resparr = response.c_str();

@@ -42,7 +42,7 @@ string Command::response(set<Client>& clientSet, int socket) {
         case CMD_ACCOUNT_ID:
         {
             cout << "ACCOUNT ID" << endl;
-            if (!client->isRegistered() || !client->loggedIn()) {
+            if (!client->isRegistered() || !client->online()) {
                 responseCode = RESPONSE_NEED_LOGIN;
                 responseData = NEED_LOGIN_STR;
                 break;
@@ -56,7 +56,7 @@ string Command::response(set<Client>& clientSet, int socket) {
         case CMD_BALANCE:
         {
             cout << "BALANCE" << endl;
-            if (!client->isRegistered() || !client->loggedIn()) {
+            if (!client->isRegistered() || !client->online()) {
                 responseCode = RESPONSE_NEED_LOGIN;
                 responseData = NEED_LOGIN_STR;
                 break;
@@ -95,7 +95,7 @@ string Command::response(set<Client>& clientSet, int socket) {
         case CMD_GET:
         {
             cout << "MONEY GET " << trim(data) << endl;
-            if (!client->isRegistered() || !client->loggedIn()) {
+            if (!client->isRegistered() || !client->online()) {
                 responseCode = RESPONSE_NEED_LOGIN;
                 responseData = NEED_LOGIN_STR;
                 break;
@@ -123,6 +123,13 @@ string Command::response(set<Client>& clientSet, int socket) {
         case CMD_LOGIN:
         {
             cout << "LOG IN LOGIN[" << word1 << "] PASSWORD[" << word2 << "]" << endl;
+
+            if (client->online()) {
+                responseCode = RESPONSE_NEED_LOGOUT;
+                responseData = NEED_LOGOUT_STR;
+                break;
+            }
+
             // Find out if such client exists
             Client* registered = getClientByLogin(clientSet, word1);
 
@@ -140,24 +147,17 @@ string Command::response(set<Client>& clientSet, int socket) {
                 break;
             }
 
-            // Found client socket is passed socket
-            if (registered == client) {
-                if (registered->loggedIn()) {
-                    responseCode = RESPONSE_NEED_LOGOUT;
-                    responseData = NEED_LOGOUT_STR;
-                    break;
-                }
+            if (registered->online()) {
+                responseCode = RESPONSE_CLIENT_ONLINE_NOW;
+                responseData = CLIENT_ONLINE_STR;
+                break;
             }
+            else registered->detach();
+
+            if (client->isRegistered()) client->detach();
             else {
-                if (client->isRegistered()) {
-                    client->logout();
-                    client->detach();
-                }
-                else {
-                    clientSet.erase(*client);
-                    delete(client);
-                }
-                clientSet.insert(*registered);
+                clientSet.erase(*client);
+                delete(client);
             }
 
             // Found client socket is not passed socket
@@ -171,7 +171,7 @@ string Command::response(set<Client>& clientSet, int socket) {
         case CMD_LOGOUT:
         {
             cout << "LOG OUT" << endl;
-            if (client->loggedIn()) {
+            if (client->online()) {
                 responseCode = RESPONSE_OK;
                 responseData = wrapBye(client->getLogin());
                 client->logout();
@@ -187,7 +187,7 @@ string Command::response(set<Client>& clientSet, int socket) {
         case CMD_PAY_TO:
         {
             cout << "PAY " << word2 << " TO " << word1 << endl;
-            if (!client->isRegistered() || !client->loggedIn()) {
+            if (!client->isRegistered() || !client->online()) {
                 responseCode = RESPONSE_NEED_LOGIN;
                 responseData = NEED_LOGIN_STR;
                 break;
@@ -196,7 +196,7 @@ string Command::response(set<Client>& clientSet, int socket) {
             Client* to = getClientById(clientSet, word1);
             if (to == NULL) {
                 responseCode = RESPONSE_INPUT_INCORRECT;
-                responseData = LOGIN_INCORRECT_STR;
+                responseData = ID_INCORRECT_STR;
                 break;
             }
 
@@ -213,6 +213,7 @@ string Command::response(set<Client>& clientSet, int socket) {
                 break;
             }
 
+            notifySocket = to->getSocket();
             client->moneyGet(amount);
             to->moneyPut(amount);
             responseCode = RESPONSE_OK;
@@ -223,7 +224,7 @@ string Command::response(set<Client>& clientSet, int socket) {
         case CMD_PUT:
         {
             cout << "MONEY PUT " << trim(data) << endl;
-            if (!client->isRegistered() || !client->loggedIn()) {
+            if (!client->isRegistered() || !client->online()) {
                 responseCode = RESPONSE_NEED_LOGIN;
                 responseData = NEED_LOGIN_STR;
                 break;
@@ -247,7 +248,7 @@ string Command::response(set<Client>& clientSet, int socket) {
         {
             cout << "REGISTRATION LOGIN[" << word1 << "] PASSWORD[" << word2 << "]" << endl;
             // If client is already logged in
-            if (client->loggedIn()) {
+            if (client->online()) {
                 responseCode = RESPONSE_NEED_LOGOUT;
                 responseData = NEED_LOGOUT_STR;
                 break;
@@ -274,7 +275,7 @@ string Command::response(set<Client>& clientSet, int socket) {
                 break;
             }
 
-            if (client->isRegistered() && !client->loggedIn()) {
+            if (client->isRegistered() && !client->online()) {
                 client->logout();
                 client->detach();
                 Client another = Client(socket);

@@ -1,12 +1,10 @@
-#include <sys/types.h>
 #include <windows.h>
 #include <stdio.h>
 #include <iostream>
-#include <winsock2.h>
-#include <conio.h>
 #include <vector>
 #include <algorithm>
 #include "Command.h"
+#include <thread>
 
 using namespace std;
 
@@ -16,8 +14,16 @@ static const string EXIT = "exit";
 static const string HELP = "help";
 
 int iClient = 1;
+HANDLE hMutex;
+
+typedef struct ClientData {
+    int socket;
+    struct sockaddr *addr;
+    int *addrlen;
+} CDATA, *PCDATA;
 
 bool send(string msg, int socket);
+
 
 // Initialize Winsock
 int initWinsock() {
@@ -81,6 +87,7 @@ bool readn(int n, int socket) {
         if (buf[0] == PREFIX) fill += rc;
     }
 
+    WaitForSingleObject(hMutex, INFINITE);
     if (receivedClientListItem(buf, true)) {
         string cmd = CLIENT_NEXT_STR;
         stringstream ss;
@@ -88,9 +95,8 @@ bool readn(int n, int socket) {
         send(Command(split(ss.str(), ' ')), socket);
     }
     else iClient = 1;
-
     if (!receivedClientListItem(buf, false)) printlnMsg(buf, n);
-
+    ReleaseMutex(hMutex);
 
     return true;
 }
@@ -109,7 +115,13 @@ bool send(string msg, int socket) {
         i += rc;
     }
 
-    return readn(CMD_SIZE + 1, socket);
+    return true;
+}
+
+DWORD WINAPI receiveThread(CONST LPVOID lpParam) {
+    CONST PCDATA data = (PCDATA) lpParam;
+    while (readn(CMD_SIZE + 1, data->socket));
+    ExitThread(0);
 }
 
 void printHelp() {
@@ -134,6 +146,7 @@ void exitServer(int socket) {
 
 int main() {
     struct sockaddr_in peer;
+    PCDATA receiveThreadData = new ClientData();
     int cs;
     string addr = "127.0.0.1";
     u_short port = 7500;
@@ -155,10 +168,21 @@ int main() {
     cs = createSocket(&peer, addr.c_str(), port);
     checkConnect(cs, peer, addrport);
 
+    hMutex = CreateMutex(NULL, FALSE, NULL);
+
+    receiveThreadData->socket = cs;
+    HANDLE hReceiveThread = CreateThread(
+            NULL,
+            0,
+            &receiveThread,
+            receiveThreadData,
+            0,
+            NULL
+    );
+
     string cmd;
     vector<string> tokens;
     while (true) {
-        cout << addrport << ">";
         getline(cin, cmd);
         cout << endl;
 
@@ -173,6 +197,9 @@ int main() {
 
         if (cmd == EXIT) {
             exitServer(cs);
+            WaitForSingleObject(hReceiveThread, INFINITE);
+            CloseHandle(hReceiveThread);
+            CloseHandle(hMutex);
             break;
         }
 

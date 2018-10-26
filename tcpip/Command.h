@@ -29,17 +29,20 @@ static const char CMD_PAY_TO     = '6';
 static const char CMD_PUT        = '7';
 static const char CMD_REGISTER   = '8';
 
-static const char RESPONSE_BAD_DATA        = 'b';
-static const char RESPONSE_CLIENTS         = 'c';
-static const char RESPONSE_INPUT_INCORRECT = 'i';
-static const char RESPONSE_LOGIN_BUSY      = 'l';
-static const char RESPONSE_NEED_LOGIN      = 'm';
-static const char RESPONSE_NEED_LOGOUT     = 'n';
-static const char RESPONSE_OK              = 'o';
-static const char RESPONSE_UNKNOWN_CMD     = 'u';
+static const char RESPONSE_BAD_DATA          = 'b';
+static const char RESPONSE_CLIENTS           = 'c';
+static const char RESPONSE_INPUT_INCORRECT   = 'i';
+static const char RESPONSE_LOGIN_BUSY        = 'l';
+static const char RESPONSE_NEED_LOGIN        = 'm';
+static const char RESPONSE_NEED_LOGOUT       = 'n';
+static const char RESPONSE_CLIENT_ONLINE_NOW = 'w';
+static const char RESPONSE_OK                = 'o';
+static const char RESPONSE_UNKNOWN_CMD       = 'u';
 
 static const string BAD_DATA_STR        = "ERROR Broken data  please retry sending ";
+static const string CLIENT_ONLINE_STR   = "Client is online now                    ";
 static const string LOGIN_INCORRECT_STR = "ERROR Login incorrect input             ";
+static const string ID_INCORRECT_STR    = "ERROR ID incorrect input                ";
 static const string PASS_INCORRECT_STR  = "ERROR Password incorrect input          ";
 static const string LOGIN_BUSY_STR      = "Login is busy                           ";
 static const string INSUF_FUNDS_STR     = "Insufficient funds                      ";
@@ -55,6 +58,7 @@ class Command {
 private:
     char code;
     string data;
+    int notifySocket = -1;
     void checkData();
 public:
     Command(string cmd);
@@ -63,6 +67,7 @@ public:
     static string wrapBalance(unsigned long balance);
     static string wrapWelcome(string login);
     static string wrapBye(string login);
+    int notify() { return notifySocket; }
     string extractWord(unsigned int start, unsigned int end);
     unsigned long extractULong(unsigned int start, unsigned int end);
     string response(set<Client>& clientSet, int socket);

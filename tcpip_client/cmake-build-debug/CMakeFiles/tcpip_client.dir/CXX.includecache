@@ -29,17 +29,11 @@ cstdlib
 -
 
 D:/Users/Valentin/CLionProjects/tcpip_git/tcpip_client/main.cpp
-sys/types.h
--
 windows.h
 -
 stdio.h
 -
 iostream
--
-winsock2.h
--
-conio.h
 -
 vector
 -
@@ -47,4 +41,6 @@ algorithm
 -
 Command.h
 D:/Users/Valentin/CLionProjects/tcpip_git/tcpip_client/Command.h
+thread
+-
 
