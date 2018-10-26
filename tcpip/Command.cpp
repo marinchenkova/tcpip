@@ -49,7 +49,7 @@ string Command::response(set<Client>& clientSet, int socket) {
             }
 
             responseCode = RESPONSE_OK;
-            responseData = wrapData(client->getId(), CMD_DATA_SIZE, "0", true);
+            responseData = wrapData(client->getId(), CMD_DATA_SIZE, " ", false);
             break;
         }
 
@@ -70,13 +70,6 @@ string Command::response(set<Client>& clientSet, int socket) {
         case CMD_CLIENTS:
         {
             cout << "CLIENT LIST";
-            if (trim(word1) == START_ITER_C_STR) {
-                responseCode = RESPONSE_CLIENTS;
-                responseData = wrapData((unsigned long) numRegistered(clientSet), CMD_DATA_SIZE, " ", false);
-                cout << " SIZE" << endl;
-                break;
-            }
-
             if (!isNumber(word1)) {
                 responseCode = RESPONSE_INPUT_INCORRECT;
                 responseData = NEED_NUMBER_STR;
@@ -93,7 +86,7 @@ string Command::response(set<Client>& clientSet, int socket) {
                 break;
             }
 
-            responseCode = RESPONSE_OK;
+            responseCode = RESPONSE_CLIENTS;
             responseData = wrapData(need->getId(), CMD_DATA_SIZE, " ", false);
             cout << " NEXT" << endl;
             break;
@@ -131,7 +124,7 @@ string Command::response(set<Client>& clientSet, int socket) {
         {
             cout << "LOG IN LOGIN[" << word1 << "] PASSWORD[" << word2 << "]" << endl;
             // Find out if such client exists
-            Client* registered = getClient(clientSet, word1);
+            Client* registered = getClientByLogin(clientSet, word1);
 
             // If client not exists
             if (registered == NULL) {
@@ -156,9 +149,15 @@ string Command::response(set<Client>& clientSet, int socket) {
                 }
             }
             else {
-                clientSet.erase(*client);
+                if (client->isRegistered()) {
+                    client->logout();
+                    client->detach();
+                }
+                else {
+                    clientSet.erase(*client);
+                    delete(client);
+                }
                 clientSet.insert(*registered);
-                delete(client);
             }
 
             // Found client socket is not passed socket
@@ -194,7 +193,7 @@ string Command::response(set<Client>& clientSet, int socket) {
                 break;
             }
 
-            Client* to = getClient(clientSet, word1);
+            Client* to = getClientById(clientSet, word1);
             if (to == NULL) {
                 responseCode = RESPONSE_INPUT_INCORRECT;
                 responseData = LOGIN_INCORRECT_STR;
@@ -272,6 +271,23 @@ string Command::response(set<Client>& clientSet, int socket) {
             if (loginBusy(clientSet, word1)) {
                 responseCode = RESPONSE_LOGIN_BUSY;
                 responseData = LOGIN_BUSY_STR;
+                break;
+            }
+
+            if (client->isRegistered() && !client->loggedIn()) {
+                client->logout();
+                client->detach();
+                Client another = Client(socket);
+                // Login and password are correct, complete registration
+                another.registerMe(
+                        word1,
+                        word2,
+                        wrapData((unsigned long) numRegistered(clientSet), MAX_WORD_SIZE, "0", true)
+                );
+                clientSet.insert(another);
+                responseCode = RESPONSE_OK;
+                responseData = wrapWelcome(another.getLogin());
+                cout << another << " registered" << endl;
                 break;
             }
 

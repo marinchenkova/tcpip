@@ -48,8 +48,8 @@ static const string NEED_LOGOUT_STR     = "You are already logged in            
 static const string NEED_NUMBER_STR     = "ERROR Need number                       ";
 static const string UNKNOWN_CMD_STR     = "ERROR Unknown command                   ";
 
-static const string START_ITER_C_STR = "START";
-static const string FINISH_ITER_C_STR = "FINISH";
+static const string FINISH_ITER_C_STR = "F";
+
 
 class Command {
 private:

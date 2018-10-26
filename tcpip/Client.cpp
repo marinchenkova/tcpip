@@ -70,7 +70,15 @@ Client* getClientByIndex(set<Client> &clientSet, int index) {
     return NULL;
 }
 
-Client* getClient(set<Client> &clientSet, string id) {
+Client* getClientByLogin(set<Client> &clientSet, string login) {
+    for (set<Client>::iterator it = clientSet.begin(); it != clientSet.end(); ++it) {
+        if (((Client) *it).isRegistered() && (login == ((Client) *it).getLogin()))
+            return (Client *) &(*it);
+    }
+    return NULL;
+}
+
+Client* getClientById(set<Client> &clientSet, string id) {
     for (set<Client>::iterator it = clientSet.begin(); it != clientSet.end(); ++it) {
         if (((Client) *it).isRegistered() && (id == ((Client) *it).getId()))
             return (Client *) &(*it);

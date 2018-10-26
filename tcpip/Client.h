@@ -40,7 +40,8 @@ public:
 };
 
 Client* getClient(set<Client>& clientSet, int socket);
-Client* getClient(set<Client>& clientSet, string id);
+Client* getClientById(set<Client> &clientSet, string id);
+Client* getClientByLogin(set<Client> &clientSet, string login);
 Client* getClientByIndex(set<Client> &clientSet, int index);
 int numRegistered(set<Client> &clientSet);
 bool loginBusy(set<Client>& clientSet, string login);

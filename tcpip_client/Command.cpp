@@ -3,73 +3,98 @@
 #include "Command.h"
 
 
-Command::Command(string cmd) {
-    code = 'z';
+Command::Command(vector<string> tokens) {
+    code = '?';
     data = EMPTY_STR;
-    if (cmd == CMD_ACCOUNT_ID_STR) {
+    if (tokens[0] == CMD_ACCOUNT_ID_STR) {
         code = CMD_ACCOUNT_ID;
         return;
     }
 
-    if (cmd == CMD_BALANCE_STR) {
+    if (tokens[0] == CMD_BALANCE_STR) {
         code = CMD_BALANCE;
         return;
     }
 
-    if (cmd == CMD_CLIENTS_STR) {
+    if (tokens[0] == CMD_CLIENTS_STR) {
         code = CMD_CLIENTS;
-        data = wrapData(START_ITER_C_STR, CMD_DATA_SIZE, " ", false);
+        data = wrapData("0", CMD_DATA_SIZE, " ", false);
         return;
     }
 
-    if (cmd == CMD_GET_STR) {
-        string amount;
-        cin >> amount;
+    if (tokens[0] == CLIENT_NEXT_STR) {
+        string i = "";
+        if (tokens.size() >= 2) {
+            i = tokens[1];
+        }
+        code = CMD_CLIENTS;
+        data = wrapData(i, CMD_DATA_SIZE, " ", false);
+        return;
+    }
+
+    if (tokens[0] == CMD_GET_STR) {
+        string amount = "";
+        if (tokens.size() >= 2) {
+            amount = tokens[1];
+        }
+
         code = CMD_GET;
         data = wrapData(amount, CMD_DATA_SIZE, " ", false);
         return;
     }
 
-    if (cmd == CMD_LOGIN_STR) {
-        string login;
-        string password;
-        cin >> login;
-        cin >> password;
+    if (tokens[0] == CMD_LOGIN_STR) {
+        string login = "";
+        string password = "";
+        if (tokens.size() >= 3) {
+            login = tokens[1];
+            password = tokens[2];
+        }
+
         code = CMD_LOGIN;
         data = wrapData(login, MAX_WORD_SIZE, " ", false) +
                wrapData(password, MAX_WORD_SIZE, " ", false);
         return;
     }
 
-    if (cmd == CMD_LOGOUT_STR) {
+    if (tokens[0] == CMD_LOGOUT_STR) {
         code = CMD_LOGOUT;
         return;
     }
 
-    if (cmd == CMD_PAY_TO_STR) {
-        string id;
-        string amount;
-        cin >> id;
-        cin >> amount;
+    if (tokens[0] == CMD_PAY_TO_STR) {
+        string id = "";
+        string amount = "";
+        if (tokens.size() >= 3) {
+            id = tokens[1];
+            amount = tokens[2];
+        }
+
         code = CMD_PAY_TO;
         data = wrapData(id, MAX_WORD_SIZE, " ", false) +
                wrapData(amount, MAX_WORD_SIZE, " ", false);
         return;
     }
 
-    if (cmd == CMD_PUT_STR) {
-        string amount;
-        cin >> amount;
+    if (tokens[0] == CMD_PUT_STR) {
+        string amount = "";
+        if (tokens.size() >= 2) {
+            amount = tokens[1];
+        }
+
         code = CMD_PUT;
         data = wrapData(amount, CMD_DATA_SIZE, " ", false);
         return;
     }
 
-    if (cmd == CMD_REGISTER_STR) {
-        string login;
-        string password;
-        cin >> login;
-        cin >> password;
+    if (tokens[0] == CMD_REGISTER_STR) {
+        string login = "";
+        string password = "";
+        if (tokens.size() >= 3) {
+            login = tokens[1];
+            password = tokens[2];
+        }
+
         code = CMD_REGISTER;
         data = wrapData(login, MAX_WORD_SIZE, " ", false) +
                wrapData(password, MAX_WORD_SIZE, " ", false);
@@ -86,6 +111,10 @@ Command::operator string() const {
 ostream &operator<<(ostream &os, const Command &command) {
     string s = command;
     return os << s;
+}
+
+bool receivedClientListItem(char *buf, bool next) {
+    return buf[1] == RESPONSE_CLIENTS && (next ? buf[3] != ' ' : buf[3] == ' ');
 }
 
 string Command::wrapData(string data, int size, string wrap, bool start) {

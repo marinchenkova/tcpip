@@ -14,6 +14,10 @@ using namespace std;
 static const string EXIT = "exit";
 static const string HELP = "help";
 
+int iClient = 1;
+
+bool send(string msg, int socket);
+
 // Initialize Winsock
 int initWinsock() {
     WSADATA wsaData;
@@ -54,6 +58,16 @@ void printlnMsg(char *arr, int size) {
     printf("\n");
 }
 
+vector<string> split(const string& s, char delimiter) {
+    vector<string> tokens;
+    string token;
+    istringstream tokenStream(s);
+    while (getline(tokenStream, token, delimiter)) {
+        tokens.push_back(token);
+    }
+    return tokens;
+}
+
 bool readn(int n, int socket) {
     char buf[CMD_SIZE + 1];
     int rc = 0;
@@ -66,7 +80,16 @@ bool readn(int n, int socket) {
         if (buf[0] == PREFIX) fill += rc;
     }
 
-    printlnMsg(buf, n);
+    if (receivedClientListItem(buf, true)) {
+        string cmd = CLIENT_NEXT_STR;
+        stringstream ss;
+        ss << cmd << " " << iClient++;
+        send(Command(split(ss.str(), ' ')), socket);
+    }
+    else iClient = 1;
+
+    if (!receivedClientListItem(buf, false)) printlnMsg(buf, n);
+
 
     return true;
 }
@@ -131,10 +154,15 @@ int main() {
     checkConnect(cs, peer, addrport);
 
     string cmd;
+    vector<string> tokens;
     while (true) {
         cout << addrport << ">";
-        cin >> cmd;
+        getline(cin, cmd);
         cout << endl;
+
+        tokens = split(cmd, ' ');
+
+        if (tokens.size() == 0) continue;
 
         if (cmd == HELP) {
             printHelp();
@@ -146,7 +174,7 @@ int main() {
             break;
         }
 
-        if (!send(Command(cmd), cs)) {
+        if (!send(Command(tokens), cs)) {
             cout << "Server not responding" << endl;
             exitServer(cs);
             return 0;
