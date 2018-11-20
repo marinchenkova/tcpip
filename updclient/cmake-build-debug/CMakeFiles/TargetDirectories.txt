@@ -1,0 +1,3 @@
+D:/Users/Valentin/CLionProjects/updclient/cmake-build-debug/CMakeFiles/updclient.dir
+D:/Users/Valentin/CLionProjects/updclient/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/Users/Valentin/CLionProjects/updclient/cmake-build-debug/CMakeFiles/rebuild_cache.dir

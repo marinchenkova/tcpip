@@ -1,6 +1,5 @@
 #include "Command.h"
 
-
 Command::Command(vector<string> tokens) {
     code = '?';
     data = EMPTY_STR;

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="udpserver"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="udpserver">
+				<Option output="D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/udpserver.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="d:\programming\mingw\bin\../lib/gcc/mingw32/5.3.0/include"/>
+					<Add directory="d:\programming\mingw\bin\../lib/gcc/mingw32/5.3.0/../../../../include"/>
+					<Add directory="d:\programming\mingw\bin\../lib/gcc/mingw32/5.3.0/include-fixed"/>
+					<Add directory="d:\programming\mingw\bin\../lib/gcc/mingw32/5.3.0/../../../../mingw32/include"/>
+					<Add directory="d:\programming\mingw\bin\../lib/gcc/mingw32/5.3.0/include/c++"/>
+					<Add directory="d:\programming\mingw\bin\../lib/gcc/mingw32/5.3.0/include/c++/mingw32"/>
+					<Add directory="d:\programming\mingw\bin\../lib/gcc/mingw32/5.3.0/include/c++/backward"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 udpserver"/>
+					<CompileFile command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="udpserver/fast">
+				<Option output="D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/udpserver.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="d:\programming\mingw\bin\../lib/gcc/mingw32/5.3.0/include"/>
+					<Add directory="d:\programming\mingw\bin\../lib/gcc/mingw32/5.3.0/../../../../include"/>
+					<Add directory="d:\programming\mingw\bin\../lib/gcc/mingw32/5.3.0/include-fixed"/>
+					<Add directory="d:\programming\mingw\bin\../lib/gcc/mingw32/5.3.0/../../../../mingw32/include"/>
+					<Add directory="d:\programming\mingw\bin\../lib/gcc/mingw32/5.3.0/include/c++"/>
+					<Add directory="d:\programming\mingw\bin\../lib/gcc/mingw32/5.3.0/include/c++/mingw32"/>
+					<Add directory="d:\programming\mingw\bin\../lib/gcc/mingw32/5.3.0/include/c++/backward"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 udpserver/fast"/>
+					<CompileFile command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="D:/Users/Valentin/CLionProjects/udpserver/Client.cpp">
+			<Option target="udpserver"/>
+		</Unit>
+		<Unit filename="D:/Users/Valentin/CLionProjects/udpserver/Client.h">
+			<Option target="udpserver"/>
+		</Unit>
+		<Unit filename="D:/Users/Valentin/CLionProjects/udpserver/Command.cpp">
+			<Option target="udpserver"/>
+		</Unit>
+		<Unit filename="D:/Users/Valentin/CLionProjects/udpserver/Command.h">
+			<Option target="udpserver"/>
+		</Unit>
+		<Unit filename="D:/Users/Valentin/CLionProjects/udpserver/main.cpp">
+			<Option target="udpserver"/>
+		</Unit>
+		<Unit filename="D:/Users/Valentin/CLionProjects/udpserver/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

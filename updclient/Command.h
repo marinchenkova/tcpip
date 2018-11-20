@@ -1,5 +1,5 @@
-#ifndef TCPIP_CLIENT_COMMAND_H
-#define TCPIP_CLIENT_COMMAND_H
+#ifndef UPDCLIENT_COMMAND_H
+#define UPDCLIENT_COMMAND_H
 
 #include <iostream>
 #include <vector>
@@ -9,6 +9,7 @@
 #include <string>
 #include <sstream>
 #include <cstdlib>
+#include <vector>
 
 using namespace std;
 
@@ -58,4 +59,5 @@ public:
 
 bool receivedClientListItem(char *buf, bool next);
 
-#endif //TCPIP_CLIENT_COMMAND_H
+
+#endif //UPDCLIENT_COMMAND_H
