@@ -4,8 +4,8 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "D:/Users/Valentin/CLionProjects/updclient/Command.cpp" "D:/Users/Valentin/CLionProjects/updclient/cmake-build-debug/CMakeFiles/updclient.dir/Command.cpp.obj"
-  "D:/Users/Valentin/CLionProjects/updclient/main.cpp" "D:/Users/Valentin/CLionProjects/updclient/cmake-build-debug/CMakeFiles/updclient.dir/main.cpp.obj"
+  "D:/Users/Valentin/CLionProjects/tcpip_git/updclient/Command.cpp" "D:/Users/Valentin/CLionProjects/tcpip_git/updclient/cmake-build-debug/CMakeFiles/updclient.dir/Command.cpp.obj"
+  "D:/Users/Valentin/CLionProjects/tcpip_git/updclient/main.cpp" "D:/Users/Valentin/CLionProjects/tcpip_git/updclient/cmake-build-debug/CMakeFiles/updclient.dir/main.cpp.obj"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

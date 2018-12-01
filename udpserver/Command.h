@@ -61,7 +61,7 @@ class Command {
 private:
     char code;
     string data;
-    sockaddr notifySocket;
+    sockaddr_in* notifyAddr = NULL;
     void checkData();
 public:
     Command(string cmd);
@@ -71,10 +71,10 @@ public:
     static string wrapWelcome(string login);
     static string wrapBye(string login);
     static string requestPing();
-    sockaddr notify() { return notifySocket; }
+    sockaddr_in* notify() { return notifyAddr; }
     string extractWord(unsigned int start, unsigned int end);
     unsigned long extractULong(unsigned int start, unsigned int end);
-    string response(set<Client>& clientSet, sockaddr* addr);
+    string response(set<Client>& clientSet, sockaddr_in* addr);
     operator string() const;
     friend ostream& operator<<(ostream& os, const Command& command);
 };

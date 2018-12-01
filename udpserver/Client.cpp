@@ -1,7 +1,7 @@
 #include "Client.h"
 
 
-Client::Client(sockaddr *addr) {
+Client::Client(sockaddr_in *addr) {
     _addr = addr;
 }
 
@@ -14,7 +14,7 @@ void Client::registerMe(string login, string password, string id) {
     _registered = true;
 }
 
-void Client::log_in(sockaddr *addr) {
+void Client::log_in(sockaddr_in *addr) {
     _addr = addr;
     _logged = true;
 }
@@ -36,12 +36,12 @@ void Client::moneyGet(unsigned long amount) {
 }
 
 bool Client::operator<(const Client &client) const {
-    return client._addr->sa_data < _addr->sa_data;
+    return client._addr < _addr;
 }
 
 Client::operator string() const {
     stringstream ss;
-    ss << "[" << _addr->sa_data << "]";
+    ss << "[" << inet_ntoa(_addr->sin_addr) << ":" << _addr->sin_port << "]";
     return ss.str() + "<" +
            (_registered
             ? ("LOGIN[" + _login + "] ID[" + _id + "]" + (_logged ? " ONLINE" : " OFFLINE"))
@@ -53,10 +53,10 @@ ostream &operator<<(ostream &os, const Client &client) {
     return os << s;
 }
 
-Client* getClientByAddr(set<Client> &clientSet, sockaddr* addr) {
-    /*for (set<Client>::iterator it = clientSet.begin(); it != clientSet.end(); ++it) {
+Client* getClientByAddr(set<Client> &clientSet, sockaddr_in* addr) {
+    for (set<Client>::iterator it = clientSet.begin(); it != clientSet.end(); ++it) {
         if (addrEqual(((Client) (*it)).getAddr(), addr)) return (Client *) &(*it);
-    }*/
+    }
     return NULL;
 }
 
@@ -101,8 +101,9 @@ bool loginBusy(set<Client> &clientSet, string login) {
     return false;
 }
 
-bool addrEqual(sockaddr *addr1, sockaddr *addr2) {
-    return addr1->sa_family == addr2->sa_family && addr1->sa_data == addr2->sa_data;
+bool addrEqual(sockaddr_in *addr1, sockaddr_in *addr2) {
+    return inet_ntoa(addr1->sin_addr) == inet_ntoa(addr2->sin_addr)
+            && addr1->sin_port == addr2->sin_port;
 }
 
 

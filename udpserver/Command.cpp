@@ -23,7 +23,7 @@ bool isNumber(string str) {
     return true;
 }
 
-string Command::response(set<Client>& clientSet, sockaddr* addr) {
+string Command::response(set<Client>& clientSet, sockaddr_in* addr) {
     if (data.empty()) {
         stringstream ss;
         ss << PREFIX << RESPONSE_BAD_DATA;
@@ -210,7 +210,7 @@ string Command::response(set<Client>& clientSet, sockaddr* addr) {
                 break;
             }
 
-            notifySocket = *(to->getAddr());
+            notifyAddr = to->getAddr();
             client->moneyGet(amount);
             to->moneyPut(amount);
             responseCode = RESPONSE_OK;

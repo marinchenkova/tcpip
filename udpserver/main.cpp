@@ -60,44 +60,34 @@ int checkBind(int ss, struct sockaddr_in *local) {
     return b;
 }
 
-bool send(Command cmd, int socket) {/*
+bool send(Command cmd, sockaddr_in* addr, int socket) {
     WaitForSingleObject(hMutex, INFINITE);
-    string response = cmd.response(clientSet, socket);
+    string response = cmd.response(clientSet, addr);
     ReleaseMutex(hMutex);
 
-    int notifySocket = cmd.notify();
-    if (notifySocket > 0) {
+    sockaddr_in* notifyAddr = cmd.notify();
+    if (notifyAddr != NULL) {
         string notifycmd = {PREFIX, CMD_BALANCE};
         send(Command(Command::wrapData(
                 notifycmd,
                 CMD_DATA_SIZE,
                 " ",
                 false
-        )), notifySocket);
+        )), notifyAddr, socket);
     }
 
     const char* resparr;
     resparr = response.c_str();
 
-    int rc = 0;
-    int l = response.length();
-    int i = 0;
+    int rc = sendto(socket,
+                    resparr,
+                    strlen(resparr),
+                    0,
+                    (sockaddr*) addr,
+                    sizeof(*addr)
+    );
 
-    while (i < l) {
-        rc = send(socket, resparr + i, l - i, 0);
-        rc = sendto(
-                socket,
-                resparr + i,
-                l - i,
-                0,
-                const sockaddr *to,
-                int            tolen
-        );
-        if (rc <= 0) return false;
-        i += rc;
-    }
-*/
-    return true;
+    return rc > 0;
 }
 
 void listClients() {
@@ -182,18 +172,31 @@ DWORD WINAPI receiveThread(CONST LPVOID lpParam) {
     Client *client;
 
     while (true) {
-        rc = recvfrom(socket, buf, sizeof(buf) + 1, 0, (sockaddr*) &from, &fromlen);
+        rc = recvfrom(socket,
+                      buf,
+                      sizeof(buf) + 1,
+                      0,
+                      (sockaddr*) &from,
+                      &fromlen
+        );
+
+        WaitForSingleObject(hMutex, INFINITE);
+        client = getClientByAddr(clientSet, &from);
+
         if (rc <= 0) {
-            /*client = getClientByAddr(clientSet, from);
             if (client != NULL)  {
                 client->detach();
                 client->logout();
-            }*/
+            }
             perror("recvfrom");
             cerr << "Winsock error " << WSAGetLastError() << endl;
             break;
         }
-        cout << inet_ntoa(from.sin_addr) << ":" << ntohs(from.sin_port) << buf << "]" << endl;
+        if (client == NULL) clientSet.insert(Client(&from));
+
+        send(Command(buf), &from, socket);
+
+        ReleaseMutex(hMutex);
     }
 
     ExitThread(0);
@@ -241,7 +244,7 @@ int main() {
             case LIST:
                 listClients();
                 break;
-/*
+
             case KICK:
                 WaitForSingleObject(hMutex, INFINITE);
                 cout << "Enter client socket to kick: ";
@@ -249,7 +252,7 @@ int main() {
                 ReleaseMutex(hMutex);
                 kick(strtol(ks.c_str(), NULL, 0));
                 break;
-*/
+
             case EXIT:
                 shutdown(ss, 2);
                 closesocket(ss);

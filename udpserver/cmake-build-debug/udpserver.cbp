@@ -8,18 +8,18 @@
 		<Option virtualFolders="CMake Files\;"/>
 		<Build>
 			<Target title="all">
-				<Option working_dir="D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug"/>
+				<Option working_dir="D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
-					<CompileFile command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="udpserver">
-				<Option output="D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/udpserver.exe" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug"/>
+				<Option output="D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/cmake-build-debug/udpserver.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -33,15 +33,15 @@
 					<Add directory="d:\programming\mingw\bin\../lib/gcc/mingw32/5.3.0/include/c++/backward"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 udpserver"/>
-					<CompileFile command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 udpserver"/>
+					<CompileFile command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="udpserver/fast">
-				<Option output="D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/udpserver.exe" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug"/>
+				<Option output="D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/cmake-build-debug/udpserver.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -55,49 +55,49 @@
 					<Add directory="d:\programming\mingw\bin\../lib/gcc/mingw32/5.3.0/include/c++/backward"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 udpserver/fast"/>
-					<CompileFile command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 udpserver/fast"/>
+					<CompileFile command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="edit_cache">
-				<Option working_dir="D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug"/>
+				<Option working_dir="D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
-					<CompileFile command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="rebuild_cache">
-				<Option working_dir="D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug"/>
+				<Option working_dir="D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
-					<CompileFile command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="D:/Programming/MinGW/bin/mingw32-make.exe -f &quot;D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="D:/Users/Valentin/CLionProjects/udpserver/Client.cpp">
+		<Unit filename="D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/Client.cpp">
 			<Option target="udpserver"/>
 		</Unit>
-		<Unit filename="D:/Users/Valentin/CLionProjects/udpserver/Client.h">
+		<Unit filename="D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/Client.h">
 			<Option target="udpserver"/>
 		</Unit>
-		<Unit filename="D:/Users/Valentin/CLionProjects/udpserver/Command.cpp">
+		<Unit filename="D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/Command.cpp">
 			<Option target="udpserver"/>
 		</Unit>
-		<Unit filename="D:/Users/Valentin/CLionProjects/udpserver/Command.h">
+		<Unit filename="D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/Command.h">
 			<Option target="udpserver"/>
 		</Unit>
-		<Unit filename="D:/Users/Valentin/CLionProjects/udpserver/main.cpp">
+		<Unit filename="D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/main.cpp">
 			<Option target="udpserver"/>
 		</Unit>
-		<Unit filename="D:/Users/Valentin/CLionProjects/udpserver/CMakeLists.txt">
+		<Unit filename="D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
 	</Project>

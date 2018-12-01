@@ -42,10 +42,10 @@ RM = "D:\Programs\CLion 2016.3.2\bin\cmake\bin\cmake.exe" -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = D:\Users\Valentin\CLionProjects\udpserver
+CMAKE_SOURCE_DIR = D:\Users\Valentin\CLionProjects\tcpip_git\udpserver
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = D:\Users\Valentin\CLionProjects\udpserver\cmake-build-debug
+CMAKE_BINARY_DIR = D:\Users\Valentin\CLionProjects\tcpip_git\udpserver\cmake-build-debug
 
 # Include any dependencies generated for this target.
 include CMakeFiles/udpserver.dir/depend.make
@@ -58,16 +58,16 @@ include CMakeFiles/udpserver.dir/flags.make
 
 CMakeFiles/udpserver.dir/main.cpp.obj: CMakeFiles/udpserver.dir/flags.make
 CMakeFiles/udpserver.dir/main.cpp.obj: ../main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=D:\Users\Valentin\CLionProjects\udpserver\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/udpserver.dir/main.cpp.obj"
-	D:\Programming\MinGW\bin\g++.exe   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\udpserver.dir\main.cpp.obj -c D:\Users\Valentin\CLionProjects\udpserver\main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=D:\Users\Valentin\CLionProjects\tcpip_git\udpserver\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/udpserver.dir/main.cpp.obj"
+	D:\Programming\MinGW\bin\g++.exe   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\udpserver.dir\main.cpp.obj -c D:\Users\Valentin\CLionProjects\tcpip_git\udpserver\main.cpp
 
 CMakeFiles/udpserver.dir/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/udpserver.dir/main.cpp.i"
-	D:\Programming\MinGW\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\Users\Valentin\CLionProjects\udpserver\main.cpp > CMakeFiles\udpserver.dir\main.cpp.i
+	D:\Programming\MinGW\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\Users\Valentin\CLionProjects\tcpip_git\udpserver\main.cpp > CMakeFiles\udpserver.dir\main.cpp.i
 
 CMakeFiles/udpserver.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/udpserver.dir/main.cpp.s"
-	D:\Programming\MinGW\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\Users\Valentin\CLionProjects\udpserver\main.cpp -o CMakeFiles\udpserver.dir\main.cpp.s
+	D:\Programming\MinGW\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\Users\Valentin\CLionProjects\tcpip_git\udpserver\main.cpp -o CMakeFiles\udpserver.dir\main.cpp.s
 
 CMakeFiles/udpserver.dir/main.cpp.obj.requires:
 
@@ -82,16 +82,16 @@ CMakeFiles/udpserver.dir/main.cpp.obj.provides.build: CMakeFiles/udpserver.dir/m
 
 CMakeFiles/udpserver.dir/Command.cpp.obj: CMakeFiles/udpserver.dir/flags.make
 CMakeFiles/udpserver.dir/Command.cpp.obj: ../Command.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=D:\Users\Valentin\CLionProjects\udpserver\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/udpserver.dir/Command.cpp.obj"
-	D:\Programming\MinGW\bin\g++.exe   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\udpserver.dir\Command.cpp.obj -c D:\Users\Valentin\CLionProjects\udpserver\Command.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=D:\Users\Valentin\CLionProjects\tcpip_git\udpserver\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/udpserver.dir/Command.cpp.obj"
+	D:\Programming\MinGW\bin\g++.exe   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\udpserver.dir\Command.cpp.obj -c D:\Users\Valentin\CLionProjects\tcpip_git\udpserver\Command.cpp
 
 CMakeFiles/udpserver.dir/Command.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/udpserver.dir/Command.cpp.i"
-	D:\Programming\MinGW\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\Users\Valentin\CLionProjects\udpserver\Command.cpp > CMakeFiles\udpserver.dir\Command.cpp.i
+	D:\Programming\MinGW\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\Users\Valentin\CLionProjects\tcpip_git\udpserver\Command.cpp > CMakeFiles\udpserver.dir\Command.cpp.i
 
 CMakeFiles/udpserver.dir/Command.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/udpserver.dir/Command.cpp.s"
-	D:\Programming\MinGW\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\Users\Valentin\CLionProjects\udpserver\Command.cpp -o CMakeFiles\udpserver.dir\Command.cpp.s
+	D:\Programming\MinGW\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\Users\Valentin\CLionProjects\tcpip_git\udpserver\Command.cpp -o CMakeFiles\udpserver.dir\Command.cpp.s
 
 CMakeFiles/udpserver.dir/Command.cpp.obj.requires:
 
@@ -106,16 +106,16 @@ CMakeFiles/udpserver.dir/Command.cpp.obj.provides.build: CMakeFiles/udpserver.di
 
 CMakeFiles/udpserver.dir/Client.cpp.obj: CMakeFiles/udpserver.dir/flags.make
 CMakeFiles/udpserver.dir/Client.cpp.obj: ../Client.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=D:\Users\Valentin\CLionProjects\udpserver\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/udpserver.dir/Client.cpp.obj"
-	D:\Programming\MinGW\bin\g++.exe   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\udpserver.dir\Client.cpp.obj -c D:\Users\Valentin\CLionProjects\udpserver\Client.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=D:\Users\Valentin\CLionProjects\tcpip_git\udpserver\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/udpserver.dir/Client.cpp.obj"
+	D:\Programming\MinGW\bin\g++.exe   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\udpserver.dir\Client.cpp.obj -c D:\Users\Valentin\CLionProjects\tcpip_git\udpserver\Client.cpp
 
 CMakeFiles/udpserver.dir/Client.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/udpserver.dir/Client.cpp.i"
-	D:\Programming\MinGW\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\Users\Valentin\CLionProjects\udpserver\Client.cpp > CMakeFiles\udpserver.dir\Client.cpp.i
+	D:\Programming\MinGW\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\Users\Valentin\CLionProjects\tcpip_git\udpserver\Client.cpp > CMakeFiles\udpserver.dir\Client.cpp.i
 
 CMakeFiles/udpserver.dir/Client.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/udpserver.dir/Client.cpp.s"
-	D:\Programming\MinGW\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\Users\Valentin\CLionProjects\udpserver\Client.cpp -o CMakeFiles\udpserver.dir\Client.cpp.s
+	D:\Programming\MinGW\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\Users\Valentin\CLionProjects\tcpip_git\udpserver\Client.cpp -o CMakeFiles\udpserver.dir\Client.cpp.s
 
 CMakeFiles/udpserver.dir/Client.cpp.obj.requires:
 
@@ -144,7 +144,7 @@ udpserver.exe: CMakeFiles/udpserver.dir/build.make
 udpserver.exe: CMakeFiles/udpserver.dir/linklibs.rsp
 udpserver.exe: CMakeFiles/udpserver.dir/objects1.rsp
 udpserver.exe: CMakeFiles/udpserver.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=D:\Users\Valentin\CLionProjects\udpserver\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable udpserver.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=D:\Users\Valentin\CLionProjects\tcpip_git\udpserver\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable udpserver.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\udpserver.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -163,6 +163,6 @@ CMakeFiles/udpserver.dir/clean:
 .PHONY : CMakeFiles/udpserver.dir/clean
 
 CMakeFiles/udpserver.dir/depend:
-	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" D:\Users\Valentin\CLionProjects\udpserver D:\Users\Valentin\CLionProjects\udpserver D:\Users\Valentin\CLionProjects\udpserver\cmake-build-debug D:\Users\Valentin\CLionProjects\udpserver\cmake-build-debug D:\Users\Valentin\CLionProjects\udpserver\cmake-build-debug\CMakeFiles\udpserver.dir\DependInfo.cmake --color=$(COLOR)
+	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" D:\Users\Valentin\CLionProjects\tcpip_git\udpserver D:\Users\Valentin\CLionProjects\tcpip_git\udpserver D:\Users\Valentin\CLionProjects\tcpip_git\udpserver\cmake-build-debug D:\Users\Valentin\CLionProjects\tcpip_git\udpserver\cmake-build-debug D:\Users\Valentin\CLionProjects\tcpip_git\udpserver\cmake-build-debug\CMakeFiles\udpserver.dir\DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/udpserver.dir/depend
 

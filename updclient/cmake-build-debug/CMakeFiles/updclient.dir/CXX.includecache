@@ -6,11 +6,11 @@
 
 #IncludeRegexTransform: 
 
-D:/Users/Valentin/CLionProjects/updclient/Command.cpp
+D:/Users/Valentin/CLionProjects/tcpip_git/updclient/Command.cpp
 Command.h
-D:/Users/Valentin/CLionProjects/updclient/Command.h
+D:/Users/Valentin/CLionProjects/tcpip_git/updclient/Command.h
 
-D:/Users/Valentin/CLionProjects/updclient/Command.h
+D:/Users/Valentin/CLionProjects/tcpip_git/updclient/Command.h
 iostream
 -
 vector
@@ -30,7 +30,7 @@ cstdlib
 vector
 -
 
-D:/Users/Valentin/CLionProjects/updclient/main.cpp
+D:/Users/Valentin/CLionProjects/tcpip_git/updclient/main.cpp
 windows.h
 -
 stdio.h
@@ -42,7 +42,7 @@ vector
 algorithm
 -
 Command.h
-D:/Users/Valentin/CLionProjects/updclient/Command.h
+D:/Users/Valentin/CLionProjects/tcpip_git/updclient/Command.h
 thread
 -
 

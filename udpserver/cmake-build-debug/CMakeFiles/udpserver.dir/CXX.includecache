@@ -6,11 +6,11 @@
 
 #IncludeRegexTransform: 
 
-D:/Users/Valentin/CLionProjects/udpserver/Client.cpp
+D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/Client.cpp
 Client.h
-D:/Users/Valentin/CLionProjects/udpserver/Client.h
+D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/Client.h
 
-D:/Users/Valentin/CLionProjects/udpserver/Client.h
+D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/Client.h
 sstream
 -
 string
@@ -26,11 +26,11 @@ winsock2.h
 Ws2tcpip.h
 -
 
-D:/Users/Valentin/CLionProjects/udpserver/Command.cpp
+D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/Command.cpp
 Command.h
-D:/Users/Valentin/CLionProjects/udpserver/Command.h
+D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/Command.h
 
-D:/Users/Valentin/CLionProjects/udpserver/Command.h
+D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/Command.h
 stdio.h
 -
 array
@@ -42,11 +42,11 @@ string
 sstream
 -
 Client.h
-D:/Users/Valentin/CLionProjects/udpserver/Client.h
+D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/Client.h
 cstdlib
 -
 
-D:/Users/Valentin/CLionProjects/udpserver/main.cpp
+D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/main.cpp
 windows.h
 -
 stdio.h
@@ -60,5 +60,5 @@ set
 map
 -
 Command.h
-D:/Users/Valentin/CLionProjects/udpserver/Command.h
+D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/Command.h
 

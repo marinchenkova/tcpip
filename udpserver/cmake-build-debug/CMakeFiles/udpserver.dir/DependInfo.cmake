@@ -4,9 +4,9 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "D:/Users/Valentin/CLionProjects/udpserver/Client.cpp" "D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/CMakeFiles/udpserver.dir/Client.cpp.obj"
-  "D:/Users/Valentin/CLionProjects/udpserver/Command.cpp" "D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/CMakeFiles/udpserver.dir/Command.cpp.obj"
-  "D:/Users/Valentin/CLionProjects/udpserver/main.cpp" "D:/Users/Valentin/CLionProjects/udpserver/cmake-build-debug/CMakeFiles/udpserver.dir/main.cpp.obj"
+  "D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/Client.cpp" "D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/cmake-build-debug/CMakeFiles/udpserver.dir/Client.cpp.obj"
+  "D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/Command.cpp" "D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/cmake-build-debug/CMakeFiles/udpserver.dir/Command.cpp.obj"
+  "D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/main.cpp" "D:/Users/Valentin/CLionProjects/tcpip_git/udpserver/cmake-build-debug/CMakeFiles/udpserver.dir/main.cpp.obj"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

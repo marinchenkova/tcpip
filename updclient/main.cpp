@@ -70,20 +70,31 @@ bool send(string msg, int socket, const sockaddr_in* dest) {
     const char* msgarr;
     msgarr = msg.c_str();
     int rc = 0;
-    rc = sendto(socket, msgarr, strlen(msgarr), 0, (sockaddr*) dest, sizeof(*dest));
+    rc = sendto(socket,
+                msgarr,
+                strlen(msgarr),
+                0,
+                (sockaddr*) dest,
+                sizeof(*dest)
+    );
     return rc > 0;
 }
 
-bool readn(int n, int socket, const sockaddr_in* dest) {
-    char buf[CMD_SIZE + 1];
-    int rc = 0;
-    int fill = 0;
-
-    while (fill < n) {
-        rc = recv(socket, buf + fill, n - fill, 0);
-        if (rc <= 0) return false;
-        if (buf[fill] == PREFIX) fill = 0;
-        if (buf[0] == PREFIX) fill += rc;
+bool recieve(int socket) {
+    char buf[CMD_SIZE];
+    sockaddr_in from;
+    int fromlen = sizeof(from);
+    int rc = recvfrom(socket,
+                      buf,
+                      sizeof(buf) + 1,
+                      0,
+                      (sockaddr*) &from,
+                      &fromlen
+    );
+    if (rc <= 0) {
+        perror("recvfrom");
+        cerr << "Winsock error " << WSAGetLastError() << endl;
+        return false;
     }
 
     WaitForSingleObject(hMutex, INFINITE);
@@ -91,10 +102,10 @@ bool readn(int n, int socket, const sockaddr_in* dest) {
         string cmd = CLIENT_NEXT_STR;
         stringstream ss;
         ss << cmd << " " << iClient++;
-        send(Command(split(ss.str(), ' ')), socket, dest);
+        send(Command(split(ss.str(), ' ')), socket, &from);
     }
     else iClient = 1;
-    if (!receivedClientListItem(buf, false)) printlnMsg(buf, n);
+    if (!receivedClientListItem(buf, false)) printlnMsg(buf, CMD_SIZE);
     ReleaseMutex(hMutex);
 
     return true;
@@ -102,7 +113,7 @@ bool readn(int n, int socket, const sockaddr_in* dest) {
 
 DWORD WINAPI receiveThread(CONST LPVOID lpParam) {
     CONST PCDATA data = (PCDATA) lpParam;
-    while (readn(CMD_SIZE + 1, data->socket, data->addr));
+    while (recieve(data->socket));
     ExitThread(0);
 }
 
@@ -126,8 +137,22 @@ void exitServer(int socket) {
     cout << "Exit" << endl;
 }
 
+int checkBind(int ss, sockaddr_in* local) {
+    local->sin_family = AF_INET;
+    local->sin_port = htons((u_short) rand());
+    local->sin_addr.s_addr = inet_addr("127.0.0.1");
+    int b = bind(ss, (sockaddr *) &local, sizeof(local));
+    if (b < 0) {
+        perror("bind");
+        cerr << "Winsock error " << WSAGetLastError() << endl;
+        exit(1);
+    }
+    return b;
+}
+
 int main() {
     struct sockaddr_in peer;
+    struct sockaddr_in local;
     PCDATA receiveThreadData = new ClientData();
     int cs;
     string addr = "127.0.0.1";
@@ -148,8 +173,7 @@ int main() {
     string addrport = ss.str();
 
     cs = createSocket(&peer, addr.c_str(), port);
-
-    cout << "Started at " << addrport << endl;
+    checkBind(cs, &local);
 
     hMutex = CreateMutex(NULL, FALSE, NULL);
 

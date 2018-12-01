@@ -21,13 +21,13 @@ private:
     string _password;
     unsigned long _balance = 0;
     string _id;
-    sockaddr* _addr;
+    sockaddr_in* _addr;
 
 public:
-    Client(sockaddr *addr);
+    Client(sockaddr_in *addr);
     bool online() { return _logged; }
     void registerMe(string login, string password, string id);
-    void log_in(sockaddr *addr);
+    void log_in(sockaddr_in *addr);
     void detach();
     void logout();
     void moneyPut(unsigned long amount);
@@ -36,20 +36,20 @@ public:
     string getPassword() { return _password; }
     unsigned long getBalance() { return _balance; }
     string getId() { return _id; }
-    sockaddr* getAddr() { return _addr; }
+    sockaddr_in* getAddr() { return _addr; }
     bool isRegistered() { return _registered; }
     bool operator< (const Client &client) const;
     operator string() const;
     friend ostream& operator<<(ostream& os, const Client& client);
 };
 
-Client* getClientByAddr(set<Client> &clientSet, sockaddr* addr);
+Client* getClientByAddr(set<Client> &clientSet, sockaddr_in* addr);
 Client* getClientById(set<Client> &clientSet, string id);
 Client* getClientByLogin(set<Client> &clientSet, string login);
 Client* getClientByIndex(set<Client> &clientSet, int index);
 int numRegistered(set<Client> &clientSet);
 bool loginBusy(set<Client>& clientSet, string login);
-bool addrEqual(sockaddr* addr1, sockaddr* addr2);
+bool addrEqual(sockaddr_in* addr1, sockaddr_in* addr2);
 
 
 #endif //UDPSERVER_CLIENT_H
