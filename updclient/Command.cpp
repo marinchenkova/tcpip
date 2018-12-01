@@ -8,6 +8,11 @@ Command::Command(vector<string> tokens) {
         return;
     }
 
+    if (tokens[0] == PING_STR) {
+        code = RESPONSE_PING;
+        return;
+    }
+
     if (tokens[0] == CMD_BALANCE_STR) {
         code = CMD_BALANCE;
         return;
@@ -112,6 +117,16 @@ ostream &operator<<(ostream &os, const Command &command) {
 
 bool receivedClientListItem(char *buf, bool next) {
     return buf[1] == RESPONSE_CLIENTS && (next ? buf[3] != ' ' : buf[3] == ' ');
+}
+
+Command responsePing() {
+    vector<string> tokens(10);
+    tokens[0] = PING_STR;
+    return Command(tokens);
+}
+
+bool requestedPing(char *buf) {
+    return buf[1] == CMD_PING;
 }
 
 string Command::wrapData(string data, int size, string wrap, bool start) {

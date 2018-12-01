@@ -49,11 +49,27 @@ int createSocket(struct sockaddr_in *peer, const char *addr, u_short port) {
     return ss;
 }
 
+int checkBind(int ss, sockaddr_in* local) {
+    local->sin_family = AF_INET;
+    local->sin_port = htons((u_short) rand());
+    local->sin_addr.s_addr = inet_addr("127.0.0.1");
+    int b = bind(ss, (sockaddr *) local, sizeof(*local));
+    if (b < 0) {
+        perror("bind");
+        cerr << "Winsock error " << WSAGetLastError() << endl;
+        exit(1);
+    }
+    cout << "Client "
+         << inet_ntoa(local->sin_addr) << ":" << local->sin_port
+         << " on socket " << ss << " started" << endl;
+    return b;
+}
+
 void printlnMsg(char *arr, int size) {
     for (int i = 2; i < size; i++) {
         printf( "%c", arr[i] );
     }
-    printf("\n");
+    if (arr[0] != '\0') printf("\n");
 }
 
 vector<string> split(const string& s, char delimiter) {
@@ -106,6 +122,9 @@ bool recieve(int socket) {
     }
     else iClient = 1;
     if (!receivedClientListItem(buf, false)) printlnMsg(buf, CMD_SIZE);
+
+    if (requestedPing(buf)) send(responsePing(), socket, &from);
+
     ReleaseMutex(hMutex);
 
     return true;
@@ -135,19 +154,6 @@ void exitServer(int socket) {
     shutdown(socket, 2);
     closesocket(socket);
     cout << "Exit" << endl;
-}
-
-int checkBind(int ss, sockaddr_in* local) {
-    local->sin_family = AF_INET;
-    local->sin_port = htons((u_short) rand());
-    local->sin_addr.s_addr = inet_addr("127.0.0.1");
-    int b = bind(ss, (sockaddr *) &local, sizeof(local));
-    if (b < 0) {
-        perror("bind");
-        cerr << "Winsock error " << WSAGetLastError() << endl;
-        exit(1);
-    }
-    return b;
 }
 
 int main() {

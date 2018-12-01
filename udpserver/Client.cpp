@@ -1,7 +1,7 @@
 #include "Client.h"
 
 
-Client::Client(sockaddr_in *addr) {
+Client::Client(sockaddr_in addr) {
     _addr = addr;
 }
 
@@ -14,13 +14,13 @@ void Client::registerMe(string login, string password, string id) {
     _registered = true;
 }
 
-void Client::log_in(sockaddr_in *addr) {
+void Client::log_in(sockaddr_in addr) {
     _addr = addr;
     _logged = true;
 }
 
-void Client::detach() {
-    _addr = NULL;
+void Client::relog_in() {
+    _logged = true;
 }
 
 void Client::logout() {
@@ -36,12 +36,12 @@ void Client::moneyGet(unsigned long amount) {
 }
 
 bool Client::operator<(const Client &client) const {
-    return client._addr < _addr;
+    return client._addr.sin_port < _addr.sin_port;
 }
 
 Client::operator string() const {
     stringstream ss;
-    ss << "[" << inet_ntoa(_addr->sin_addr) << ":" << _addr->sin_port << "]";
+    ss << "[" << inet_ntoa(_addr.sin_addr) << ":" << _addr.sin_port << "]";
     return ss.str() + "<" +
            (_registered
             ? ("LOGIN[" + _login + "] ID[" + _id + "]" + (_logged ? " ONLINE" : " OFFLINE"))

@@ -75,6 +75,7 @@ public:
     string extractWord(unsigned int start, unsigned int end);
     unsigned long extractULong(unsigned int start, unsigned int end);
     string response(set<Client>& clientSet, sockaddr_in* addr);
+    bool isPingResponse();
     operator string() const;
     friend ostream& operator<<(ostream& os, const Command& command);
 };

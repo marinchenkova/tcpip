@@ -21,14 +21,14 @@ private:
     string _password;
     unsigned long _balance = 0;
     string _id;
-    sockaddr_in* _addr;
+    sockaddr_in _addr;
 
 public:
-    Client(sockaddr_in *addr);
+    Client(sockaddr_in addr);
     bool online() { return _logged; }
     void registerMe(string login, string password, string id);
-    void log_in(sockaddr_in *addr);
-    void detach();
+    void log_in(sockaddr_in addr);
+    void relog_in();
     void logout();
     void moneyPut(unsigned long amount);
     void moneyGet(unsigned long amount);
@@ -36,7 +36,7 @@ public:
     string getPassword() { return _password; }
     unsigned long getBalance() { return _balance; }
     string getId() { return _id; }
-    sockaddr_in* getAddr() { return _addr; }
+    sockaddr_in* getAddr() { return &_addr; }
     bool isRegistered() { return _registered; }
     bool operator< (const Client &client) const;
     operator string() const;

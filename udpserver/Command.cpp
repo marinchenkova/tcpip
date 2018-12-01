@@ -149,16 +149,14 @@ string Command::response(set<Client>& clientSet, sockaddr_in* addr) {
                 responseData = CLIENT_ONLINE_STR;
                 break;
             }
-            else registered->detach();
 
-            if (client->isRegistered()) client->detach();
-            else {
+            if (!client->isRegistered()) {
                 clientSet.erase(*client);
                 delete(client);
             }
 
             // Found client socket is not passed socket
-            registered->log_in(addr);
+            registered->log_in(*addr);
             responseCode = RESPONSE_OK;
             responseData = wrapWelcome(registered->getLogin());
             cout << *registered << " logged in" << endl;
@@ -274,8 +272,7 @@ string Command::response(set<Client>& clientSet, sockaddr_in* addr) {
 
             if (client->isRegistered() && !client->online()) {
                 client->logout();
-                client->detach();
-                Client another = Client(addr);
+                Client another = Client(*addr);
                 // Login and password are correct, complete registration
                 another.registerMe(
                         word1,
@@ -367,7 +364,11 @@ string trim(const std::string &s) {
     return std::string(it, rit.base());
 }
 
+bool Command::isPingResponse() {
+    return code == RESPONSE_PING;
+}
+
 string Command::requestPing() {
-    return wrapData({PREFIX, RESPONSE_PING}, CMD_DATA_SIZE + 1, " ", false);
+    return wrapData({PREFIX, CMD_PING}, CMD_DATA_SIZE + 1, " ", false);
 }
 

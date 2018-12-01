@@ -3,7 +3,6 @@
 #include <iostream>
 #include <thread>
 #include <set>
-#include <map>
 #include "Command.h"
 
 #pragma comment(lib, "ws2_32.lib")
@@ -11,11 +10,10 @@ using namespace std;
 
 static const char *ADDR = "127.0.0.1";
 static const u_short PORT = 7500;
-static const int MAX_THREADS = 10;
 static const int EXIT = 'E';
 static const int LIST = 'L';
 static const int KICK = 'K';
-static const int PING_PERIOD = 30000;
+static const int PING_PERIOD = 5000;
 static const int BUFLEN = CMD_SIZE;
 
 set<Client> clientSet;
@@ -48,6 +46,9 @@ int createSocket(struct sockaddr_in *local, const char *addr, u_short port) {
         cerr << "Error calling SOCKET" << endl;
         exit(1);
     }
+    cout << "Server "
+         << addr << ":" << port
+         << " on socket " << ss << " started" << endl;
     return ss;
 }
 
@@ -100,67 +101,72 @@ void listClients() {
     ReleaseMutex(hMutex);
 }
 
-void kick(int socket) {/*
+void logoutClient(u_short port) {
     WaitForSingleObject(hMutex, INFINITE);
     cout << "Kicking " << socket << endl;
-    Client* client = getClientByAddr(clientSet, socket);
+
+    sockaddr_in addr;
+    addr.sin_addr.s_addr = inet_addr(ADDR);
+    addr.sin_family = AF_INET;
+    addr.sin_port = htons(port);
+
+    Client* client = getClientByAddr(clientSet, &addr);
     if (client != NULL) {
-        shutdown(socket, 2);
-        closesocket(socket);
         if (client->isRegistered()) {
             client->logout();
-            client->detach();
         }
         else clientSet.erase(*client);
-        cout << "Client on socket " << socket << " exited" << endl;
+        cout << "Client on port " << port << " exited" << endl;
     }
     else cout << "No such client" << endl;
     ReleaseMutex(hMutex);
-*/}
+}
 
-void kickAll(map<int, HANDLE> clientThreadMap) {
+void logoutAll() {
     WaitForSingleObject(hMutex, INFINITE);
     for (set<Client>::iterator it = clientSet.begin(); it != clientSet.end(); ++it) {
         Client* client = (Client *) &(*it);
-        int socket = 0;//client->getAddr();
-
         if (client->isRegistered()) {
             client->logout();
-            client->detach();
         }
         else clientSet.erase(*client);
-
-        shutdown(socket, 2);
-        closesocket(socket);
-        WaitForSingleObject(clientThreadMap[socket], INFINITE);
-        CloseHandle(clientThreadMap[socket]);
     }
     ReleaseMutex(hMutex);
 }
 
-void pingAll() {
+bool pingAll(int socket) {
+    int rc = 0;
+    const char* request;
+
+    WaitForSingleObject(hMutex, INFINITE);
     for (set<Client>::iterator it = clientSet.begin(); it != clientSet.end(); ++it) {
         Client *client = (Client *) &(*it);
-
+        client->logout();
+        request = Command::requestPing().c_str();
+        rc = sendto(socket,
+                    request,
+                    strlen(request),
+                    0,
+                    (sockaddr*) client->getAddr(),
+                    sizeof(*client->getAddr())
+        );
+        if (rc < 0) {
+            ReleaseMutex(hMutex);
+            perror("sendto PING");
+            cerr << "Winsock error " << WSAGetLastError() << endl;
+            return false;
+        }
     }
+    ReleaseMutex(hMutex);
+
+    return true;
 }
 
 DWORD WINAPI pingThread(CONST LPVOID lpParam) {
     int socket = ((PCDATA) lpParam)->socket;
-
-    while (true) {
-        Sleep(PING_PERIOD);
-        pingAll();
-    }
-    WaitForSingleObject(hMutex, INFINITE);
-
-
-
-    ReleaseMutex(hMutex);
-
+    while (pingAll(socket)) Sleep(PING_PERIOD);
     ExitThread(0);
 }
-
 
 DWORD WINAPI receiveThread(CONST LPVOID lpParam) {
     PCDATA threadData = (PCDATA) lpParam;
@@ -180,24 +186,28 @@ DWORD WINAPI receiveThread(CONST LPVOID lpParam) {
                       &fromlen
         );
 
-        WaitForSingleObject(hMutex, INFINITE);
-        client = getClientByAddr(clientSet, &from);
-
         if (rc <= 0) {
-            if (client != NULL)  {
-                client->detach();
-                client->logout();
-            }
             perror("recvfrom");
             cerr << "Winsock error " << WSAGetLastError() << endl;
             break;
         }
-        if (client == NULL) clientSet.insert(Client(&from));
+
+        WaitForSingleObject(hMutex, INFINITE);
+        client = getClientByAddr(clientSet, &from);
+
+        if (client == NULL) clientSet.insert(Client(from));
+        else if (Command(buf).isPingResponse()) {
+            if (client->isRegistered()) client->relog_in();
+            else clientSet.erase(*client);
+            ReleaseMutex(hMutex);
+            continue;
+        }
+        ReleaseMutex(hMutex);
 
         send(Command(buf), &from, socket);
-
-        ReleaseMutex(hMutex);
     }
+
+    logoutAll();
 
     ExitThread(0);
 }
@@ -211,12 +221,10 @@ int main() {
     ss = createSocket(&local, ADDR, PORT);
     checkBind(ss, &local);
 
-    cout << "Server on socket " << ss << " started" << endl;
-
     hMutex = CreateMutex(NULL, FALSE, NULL);
 
     receiveThreadData->socket = ss;
-    /*
+
     HANDLE hPingThread = CreateThread(
             NULL,
             0,
@@ -225,7 +233,7 @@ int main() {
             0,
             NULL
     );
-*/
+
     HANDLE hReceiveThread = CreateThread(
             NULL,
             0,
@@ -247,18 +255,20 @@ int main() {
 
             case KICK:
                 WaitForSingleObject(hMutex, INFINITE);
-                cout << "Enter client socket to kick: ";
+                cout << "Enter client socket to logoutClient: ";
                 cin >> ks;
                 ReleaseMutex(hMutex);
-                kick(strtol(ks.c_str(), NULL, 0));
+                logoutClient(strtol(ks.c_str(), NULL, 0));
                 break;
 
             case EXIT:
                 shutdown(ss, 2);
                 closesocket(ss);
                 WaitForSingleObject(hReceiveThread, INFINITE);
+                WaitForSingleObject(hPingThread, INFINITE);
                 WaitForSingleObject(hMutex, INFINITE);
                 CloseHandle(hReceiveThread);
+                CloseHandle(hPingThread);
                 CloseHandle(hMutex);
                 cont = false;
                 cout << "Exit" << endl;
