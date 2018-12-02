@@ -47,7 +47,7 @@ void Client::moneyGet(unsigned long amount) {
 }
 
 bool Client::operator<(const Client &client) const {
-    return client._addr.sin_port < _addr.sin_port;
+    return client._id < _id;
 }
 
 Client::operator string() const {

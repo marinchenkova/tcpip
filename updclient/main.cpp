@@ -161,7 +161,7 @@ bool receive(int socket) {
     bool ping = requestedPing(buf);
 
     WaitForSingleObject(hMutex, INFINITE);
-    hasMsg = !ping && rc > 0;
+    if (!ping) hasMsg = rc > 0;
     ReleaseMutex(hMutex);
 
     if (rc <= 0) return retries++ < RETRIES;

@@ -13,7 +13,7 @@ static const u_short PORT = 7500;
 static const int EXIT = 'E';
 static const int LIST = 'L';
 static const int KICK = 'K';
-static const int PING_PERIOD = 5000;
+static const int PING_PERIOD = 10000;
 static const int BUFLEN = CMD_SIZE;
 
 set<Client> clientSet;
@@ -141,20 +141,23 @@ bool pingAll(int socket) {
     WaitForSingleObject(hMutex, INFINITE);
     for (set<Client>::iterator it = clientSet.begin(); it != clientSet.end(); ++it) {
         Client *client = (Client *) &(*it);
-        client->logout();
-        request = Command::requestPing(CMD_PING).c_str();
-        rc = sendto(socket,
-                    request,
-                    strlen(request),
-                    0,
-                    (sockaddr*) client->getAddr(),
-                    sizeof(*client->getAddr())
-        );
-        if (rc < 0) {
-            ReleaseMutex(hMutex);
-            perror("sendto PING");
-            cerr << "Winsock error " << WSAGetLastError() << endl;
-            return false;
+        if (client->online()) {
+            cout << "PINGING " << *client << endl;
+            client->logout();
+            request = Command::requestPing(CMD_PING).c_str();
+            rc = sendto(socket,
+                        request,
+                        strlen(request),
+                        0,
+                        (sockaddr*) client->getAddr(),
+                        sizeof(*client->getAddr())
+            );
+            if (rc < 0) {
+                ReleaseMutex(hMutex);
+                perror("sendto PING");
+                cerr << "Winsock error " << WSAGetLastError() << endl;
+                return false;
+            }
         }
     }
     ReleaseMutex(hMutex);
@@ -171,6 +174,7 @@ DWORD WINAPI pingThread(CONST LPVOID lpParam) {
 DWORD WINAPI receiveThread(CONST LPVOID lpParam) {
     PCDATA threadData = (PCDATA) lpParam;
     int socket = threadData->socket;
+    int e;
     char buf[BUFLEN];
     int rc = 0;
     sockaddr_in from;
@@ -187,16 +191,28 @@ DWORD WINAPI receiveThread(CONST LPVOID lpParam) {
         );
         WaitForSingleObject(hMutex, INFINITE);
         client = getClientByAddr(clientSet, &from);
-        if (rc <= 0) {
-            client->logout();
-            cout << client << " now offline" << endl;
-            break;
-        }
-
         if (client == NULL) {
             clientSet.insert(Client(from));
         }
-        else if (Command(buf).isPingResponse()) {
+        ReleaseMutex(hMutex);
+
+        if (rc <= 0) {
+            if (0 != (e = WSAGetLastError())) {
+                WaitForSingleObject(hMutex, INFINITE);
+                cout << "WSA error: "<< e << endl;
+                ReleaseMutex(hMutex);
+                break;
+            }
+
+            WaitForSingleObject(hMutex, INFINITE);
+            client->logout();
+            cout << *client << " exited" << endl;
+            ReleaseMutex(hMutex);
+            continue;
+        }
+
+        WaitForSingleObject(hMutex, INFINITE);
+        if (Command(buf).isPingResponse()) {
             if (client->isRegistered()) {
                 client->relog_in();
             }
@@ -209,6 +225,7 @@ DWORD WINAPI receiveThread(CONST LPVOID lpParam) {
         send(Command(buf), &from, socket);
     }
 
+    cout << "BREAK" << endl;
     logoutAll();
 
     ExitThread(0);
