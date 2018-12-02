@@ -273,7 +273,7 @@ string Command::response(set<Client>& clientSet, sockaddr_in* addr) {
 
             if (client->isRegistered() && !client->online()) {
                 client->logout();
-                Client another = Client(*addr);
+                Client another = Client(*addr, num);
                 // Login and password are correct, complete registration
                 another.registerMe(
                         word1,

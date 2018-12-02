@@ -18,6 +18,7 @@ private:
     bool _registered = false;
     bool _logged = false;
     bool _kicked = false;
+    int _num = 0;
     string _login;
     string _password;
     unsigned long _balance = 0;
@@ -25,7 +26,7 @@ private:
     sockaddr_in _addr;
 
 public:
-    Client(sockaddr_in addr);
+    Client(sockaddr_in addr, char num);
     bool online() const;
     void registerMe(string login, string password, string id);
     void log_in(sockaddr_in addr);
@@ -34,6 +35,7 @@ public:
     void kick();
     void moneyPut(unsigned long amount);
     void moneyGet(unsigned long amount);
+    int nextNum();
     string getLogin() { return _login; }
     string getPassword() { return _password; }
     unsigned long getBalance() { return _balance; }

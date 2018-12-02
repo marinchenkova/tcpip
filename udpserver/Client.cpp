@@ -1,8 +1,9 @@
 #include "Client.h"
 
 
-Client::Client(sockaddr_in addr) {
+Client::Client(sockaddr_in addr, char num) {
     _addr = addr;
+    _num = num;
 }
 
 void Client::registerMe(string login, string password, string id) {
@@ -64,6 +65,13 @@ ostream &operator<<(ostream &os, const Client &client) {
     return os << s;
 }
 
+int Client::nextNum() {
+    if (_num == 8) {
+        _num = 0;
+        return 8;
+    }
+    return _num++;
+}
 
 
 Client* getClientByAddr(set<Client> &clientSet, sockaddr_in* addr) {

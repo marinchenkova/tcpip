@@ -167,7 +167,7 @@ bool pingAll(int socket) {
 
 DWORD WINAPI pingThread(CONST LPVOID lpParam) {
     int socket = ((PCDATA) lpParam)->socket;
-    while (pingAll(socket)) Sleep(PING_PERIOD);
+    //while (pingAll(socket)) Sleep(PING_PERIOD);
     ExitThread(0);
 }
 
@@ -175,6 +175,7 @@ DWORD WINAPI receiveThread(CONST LPVOID lpParam) {
     PCDATA threadData = (PCDATA) lpParam;
     int socket = threadData->socket;
     int e;
+    char cn;
     char buf[BUFLEN];
     int rc = 0;
     sockaddr_in from;
@@ -189,12 +190,14 @@ DWORD WINAPI receiveThread(CONST LPVOID lpParam) {
                       (sockaddr*) &from,
                       &fromlen
         );
+        Command cmd = Command(buf);
+
         WaitForSingleObject(hMutex, INFINITE);
         client = getClientByAddr(clientSet, &from);
-        if (client == NULL) {
-            clientSet.insert(Client(from));
-        }
+        if (client == NULL) clientSet.insert(Client(from, cmd.getNum()));
         ReleaseMutex(hMutex);
+
+        cout << "MSG [" << buf << "]" << endl;
 
         if (rc <= 0) {
             if (0 != (e = WSAGetLastError())) {
@@ -221,8 +224,12 @@ DWORD WINAPI receiveThread(CONST LPVOID lpParam) {
             continue;
         }
         ReleaseMutex(hMutex);
-
-        send(Command(buf), &from, socket);
+/*
+        cn = client == NULL ? cmd.getNum() : client->nextNum();
+        cout << "cmd num=" << cmd.getNum()
+             << ", client num=" << cn << endl;
+        if (cmd.getNum() == cn) */
+            send(cmd, &from, socket);
     }
 
     cout << "BREAK" << endl;
