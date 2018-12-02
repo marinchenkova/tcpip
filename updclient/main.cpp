@@ -86,6 +86,8 @@ char nextDgram() {
     return dgramNum++;
     */
 
+    /*
+    // 0 2 1 3
     if (dgramNum == '1') {
         dgramNum++;
         return '2';
@@ -95,7 +97,19 @@ char nextDgram() {
         return '1';
     }
     return dgramNum++;
+    */
 
+
+    // 0 1 1 2 2
+    if (dgramNum == '2') {
+        dgramNum++;
+        return '1';
+    }
+    if (dgramNum == '3' || dgramNum == '4') {
+        dgramNum++;
+        return '2';
+    }
+    return dgramNum++;
 }
 
 void printlnMsg(char *arr, int size) {
