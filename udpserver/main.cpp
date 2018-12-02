@@ -88,6 +88,7 @@ bool send(Command cmd, sockaddr_in* addr, int socket) {
                     sizeof(*addr)
     );
 
+
     return rc > 0;
 }
 
@@ -191,10 +192,6 @@ DWORD WINAPI receiveThread(CONST LPVOID lpParam) {
             cout << client << " now offline" << endl;
             break;
         }
-
-        //cout << "MSG:" << buf << endl;
-
-
 
         if (client == NULL) {
             clientSet.insert(Client(from));

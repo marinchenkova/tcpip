@@ -12,9 +12,12 @@ using namespace std;
 
 static const string EXIT_CMD = "exit";
 static const string HELP_CMD = "help";
+static const int RETRIES = 1;
 
 int iClient = 1;
+int retries = 0;
 char dgramNum = '0';
+bool hasMsg = false;
 HANDLE hMutex;
 
 
@@ -51,6 +54,7 @@ int createSocket(struct sockaddr_in *peer, const char *addr, u_short port) {
 }
 
 int checkBind(int ss, sockaddr_in* local) {
+    srand(time(NULL));
     local->sin_family = AF_INET;
     local->sin_port = htons((u_short) rand());
     local->sin_addr.s_addr = inet_addr("127.0.0.1");
@@ -64,6 +68,13 @@ int checkBind(int ss, sockaddr_in* local) {
          << inet_ntoa(local->sin_addr) << ":" << ntohs(local->sin_port)
          << " on socket " << ss << " started" << endl;
     return b;
+}
+
+void exitServer(int socket) {
+    shutdown(socket, 2);
+    closesocket(socket);
+    cout << "Exit" << endl;
+    exit(0);
 }
 
 char nextDgram() {
@@ -91,10 +102,21 @@ vector<string> split(const string& s, char delimiter) {
     return tokens;
 }
 
-bool send(string msg, int socket, const sockaddr_in* dest) {
+bool send(string msg, int socket, const sockaddr_in* dest, bool ping) {
     const char* msgarr;
     msgarr = msg.c_str();
     int rc = 0;
+    int s = 0;
+
+    fd_set read_s;
+    timeval time_out;
+
+    FD_ZERO (&read_s);
+    FD_SET (socket, &read_s);
+
+    time_out.tv_sec = 1;
+    time_out.tv_usec = 0;
+
     rc = sendto(socket,
                 msgarr,
                 strlen(msgarr),
@@ -102,6 +124,25 @@ bool send(string msg, int socket, const sockaddr_in* dest) {
                 (sockaddr*) dest,
                 sizeof(*dest)
     );
+
+    if (!ping) {
+        s = select(0, &read_s, NULL, NULL, &time_out);
+
+        WaitForSingleObject(hMutex, INFINITE);
+        if (!hasMsg && s == 0) {
+            cout << "Timeout error: retrying sending msg..." << endl;
+            rc = sendto(socket,
+                        msgarr,
+                        strlen(msgarr),
+                        0,
+                        (sockaddr*) dest,
+                        sizeof(*dest)
+            );
+        }
+        hasMsg = false;
+        ReleaseMutex(hMutex);
+    }
+
     return rc > 0;
 }
 
@@ -109,6 +150,7 @@ bool receive(int socket) {
     char buf[CMD_SIZE];
     sockaddr_in from;
     int fromlen = sizeof(from);
+
     int rc = recvfrom(socket,
                       buf,
                       sizeof(buf) + 1,
@@ -116,25 +158,25 @@ bool receive(int socket) {
                       (sockaddr*) &from,
                       &fromlen
     );
-    if (rc <= 0) {
-        cout << "Server not responding" << endl;
-        return false;
-    }
-    //cout << "MSG:" << buf << endl;
+    bool ping = requestedPing(buf);
+
+    WaitForSingleObject(hMutex, INFINITE);
+    hasMsg = !ping && rc > 0;
+    ReleaseMutex(hMutex);
+
+    if (rc <= 0) return retries++ < RETRIES;
+    retries = 0;
 
     WaitForSingleObject(hMutex, INFINITE);
     if (receivedClientListItem(buf, true)) {
         string cmd = CLIENT_NEXT_STR;
         stringstream ss;
         ss << cmd << " " << iClient++;
-        send(Command(split(ss.str(), ' '), nextDgram()), socket, &from);
+        send(Command(split(ss.str(), ' '), nextDgram()), socket, &from, false);
     }
     else iClient = 1;
-    if (requestedPing(buf)) send(responsePing(CMD_PING), socket, &from);
+    if (ping) send(responsePing(CMD_PING), socket, &from, true);
     else if (!receivedClientListItem(buf, false)) printlnMsg(buf, CMD_SIZE);
-
-
-
     ReleaseMutex(hMutex);
 
     return true;
@@ -143,6 +185,7 @@ bool receive(int socket) {
 DWORD WINAPI receiveThread(CONST LPVOID lpParam) {
     CONST PCDATA data = (PCDATA) lpParam;
     while (receive(data->socket));
+    exitServer(data->socket);
     ExitThread(0);
 }
 
@@ -158,12 +201,6 @@ void printHelp() {
     cout << "put <int amount>" << endl;
     cout << "register <string login> <string password>" << endl;
     cout << endl;
-}
-
-void exitServer(int socket) {
-    shutdown(socket, 2);
-    closesocket(socket);
-    cout << "Exit" << endl;
 }
 
 int main() {
@@ -226,13 +263,11 @@ int main() {
             break;
         }
 
-        WaitForSingleObject(hMutex, INFINITE);
-        if (!send(Command(tokens, nextDgram()), cs, &peer)) {
-            cout << "Server not responding" << endl;
+        if (!send(Command(tokens, nextDgram()), cs, &peer, false)) {
+            cout << "SEND: Server not responding" << endl;
             exitServer(cs);
             return 0;
         }
-        ReleaseMutex(hMutex);
     }
 
     return 0;
