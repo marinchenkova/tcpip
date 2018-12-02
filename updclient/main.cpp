@@ -14,6 +14,7 @@ static const string EXIT_CMD = "exit";
 static const string HELP_CMD = "help";
 
 int iClient = 1;
+char dgramNum = '0';
 HANDLE hMutex;
 
 
@@ -65,6 +66,14 @@ int checkBind(int ss, sockaddr_in* local) {
     return b;
 }
 
+char nextDgram() {
+    if (dgramNum == '8') {
+        dgramNum = '0';
+        return '8';
+    }
+    return dgramNum++;
+}
+
 void printlnMsg(char *arr, int size) {
     for (int i = 2; i < size; i++) {
         printf( "%c", arr[i] );
@@ -85,6 +94,7 @@ vector<string> split(const string& s, char delimiter) {
 bool send(string msg, int socket, const sockaddr_in* dest) {
     const char* msgarr;
     msgarr = msg.c_str();
+    cout << "[" << msg << "]" << endl;
     int rc = 0;
     rc = sendto(socket,
                 msgarr,
@@ -96,7 +106,7 @@ bool send(string msg, int socket, const sockaddr_in* dest) {
     return rc > 0;
 }
 
-bool recieve(int socket) {
+bool receive(int socket) {
     char buf[CMD_SIZE];
     sockaddr_in from;
     int fromlen = sizeof(from);
@@ -108,22 +118,22 @@ bool recieve(int socket) {
                       &fromlen
     );
     if (rc <= 0) {
-        perror("recvfrom");
-        cerr << "Winsock error " << WSAGetLastError() << endl;
+        cout << "Server not responding" << endl;
         return false;
     }
+    cout << "MSG:" << buf << endl;
 
     WaitForSingleObject(hMutex, INFINITE);
     if (receivedClientListItem(buf, true)) {
         string cmd = CLIENT_NEXT_STR;
         stringstream ss;
         ss << cmd << " " << iClient++;
-        send(Command(split(ss.str(), ' ')), socket, &from);
+        send(Command(split(ss.str(), ' '), nextDgram()), socket, &from);
     }
     else iClient = 1;
     if (!receivedClientListItem(buf, false)) printlnMsg(buf, CMD_SIZE);
 
-    if (requestedPing(buf)) send(responsePing(), socket, &from);
+    if (requestedPing(buf)) send(responsePing(CMD_PING), socket, &from);
 
     ReleaseMutex(hMutex);
 
@@ -132,7 +142,7 @@ bool recieve(int socket) {
 
 DWORD WINAPI receiveThread(CONST LPVOID lpParam) {
     CONST PCDATA data = (PCDATA) lpParam;
-    while (recieve(data->socket));
+    while (receive(data->socket));
     ExitThread(0);
 }
 
@@ -216,11 +226,13 @@ int main() {
             break;
         }
 
-        if (!send(Command(tokens), cs, &peer)) {
+        WaitForSingleObject(hMutex, INFINITE);
+        if (!send(Command(tokens, nextDgram()), cs, &peer)) {
             cout << "Server not responding" << endl;
             exitServer(cs);
             return 0;
         }
+        ReleaseMutex(hMutex);
     }
 
     return 0;

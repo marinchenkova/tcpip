@@ -68,7 +68,7 @@ bool send(Command cmd, sockaddr_in* addr, int socket) {
 
     sockaddr_in* notifyAddr = cmd.notify();
     if (notifyAddr != NULL) {
-        string notifycmd = {PREFIX, CMD_BALANCE};
+        string notifycmd = {cmd.getNum(), CMD_BALANCE};
         send(Command(Command::wrapData(
                 notifycmd,
                 CMD_DATA_SIZE,
@@ -142,7 +142,7 @@ bool pingAll(int socket) {
     for (set<Client>::iterator it = clientSet.begin(); it != clientSet.end(); ++it) {
         Client *client = (Client *) &(*it);
         client->logout();
-        request = Command::requestPing().c_str();
+        request = Command::requestPing(CMD_PING).c_str();
         rc = sendto(socket,
                     request,
                     strlen(request),
@@ -192,10 +192,14 @@ DWORD WINAPI receiveThread(CONST LPVOID lpParam) {
             break;
         }
 
+        cout << "MSG:" << buf << endl;
+
         WaitForSingleObject(hMutex, INFINITE);
         client = getClientByAddr(clientSet, &from);
 
-        if (client == NULL) clientSet.insert(Client(from));
+        if (client == NULL) {
+            clientSet.insert(Client(from));
+        }
         else if (Command(buf).isPingResponse()) {
             if (client->isRegistered()) client->relog_in();
             else clientSet.erase(*client);

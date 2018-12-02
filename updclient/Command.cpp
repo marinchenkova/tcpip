@@ -1,6 +1,7 @@
 #include "Command.h"
 
-Command::Command(vector<string> tokens) {
+Command::Command(vector<string> tokens, char number) {
+    num = number;
     code = '?';
     data = EMPTY_STR;
     if (tokens[0] == CMD_ACCOUNT_ID_STR) {
@@ -106,7 +107,7 @@ Command::Command(vector<string> tokens) {
 
 Command::operator string() const {
     stringstream ss;
-    ss << '[' << code;
+    ss << num << code;
     return ss.str() + data;
 }
 
@@ -119,10 +120,10 @@ bool receivedClientListItem(char *buf, bool next) {
     return buf[1] == RESPONSE_CLIENTS && (next ? buf[3] != ' ' : buf[3] == ' ');
 }
 
-Command responsePing() {
-    vector<string> tokens(10);
+Command responsePing(char number) {
+    vector<string> tokens(1);
     tokens[0] = PING_STR;
-    return Command(tokens);
+    return Command(tokens, number);
 }
 
 bool requestedPing(char *buf) {

@@ -18,7 +18,7 @@ static const unsigned int MAX_WORD_SIZE = 20;
 static const unsigned int CMD_DATA_SIZE = 40;
 static const unsigned int CMD_SIZE = CMD_DATA_SIZE + 1;
 
-static const char PREFIX = '[';
+//static const char PREFIX = '[';
 
 static const char CMD_ACCOUNT_ID = '0';
 static const char CMD_BALANCE    = '1';
@@ -60,17 +60,19 @@ static const string FINISH_ITER_C_STR = "F";
 class Command {
 private:
     char code;
+    char num;
     string data;
     sockaddr_in* notifyAddr = NULL;
     void checkData();
 public:
     Command(string cmd);
+    char getNum() { return num; }
     static string wrapData(string data, int size, string wrap, bool start);
     static string wrapData(unsigned long data, int size, string wrap, bool start);
     static string wrapBalance(unsigned long balance);
     static string wrapWelcome(string login);
     static string wrapBye(string login);
-    static string requestPing();
+    static string requestPing(char num);
     sockaddr_in* notify() { return notifyAddr; }
     string extractWord(unsigned int start, unsigned int end);
     unsigned long extractULong(unsigned int start, unsigned int end);

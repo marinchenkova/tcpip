@@ -2,6 +2,7 @@
 
 
 Command::Command(string cmd) {
+    num = cmd[0];
     code = cmd[1];
     data = cmd.substr(2, CMD_DATA_SIZE);
     checkData();
@@ -26,7 +27,7 @@ bool isNumber(string str) {
 string Command::response(set<Client>& clientSet, sockaddr_in* addr) {
     if (data.empty()) {
         stringstream ss;
-        ss << PREFIX << RESPONSE_BAD_DATA;
+        ss << num << RESPONSE_BAD_DATA;
         return ss.str() + BAD_DATA_STR;
     }
 
@@ -308,7 +309,7 @@ string Command::response(set<Client>& clientSet, sockaddr_in* addr) {
     }
     cout << "Responding: " << responseData << endl << endl;
     stringstream ss;
-    ss << PREFIX << responseCode;
+    ss << num << responseCode;
     return ss.str() + responseData;
 }
 
@@ -368,7 +369,7 @@ bool Command::isPingResponse() {
     return code == RESPONSE_PING;
 }
 
-string Command::requestPing() {
-    return wrapData({PREFIX, CMD_PING}, CMD_DATA_SIZE + 1, " ", false);
+string Command::requestPing(char num) {
+    return wrapData({num, CMD_PING}, CMD_DATA_SIZE + 1, " ", false);
 }
 

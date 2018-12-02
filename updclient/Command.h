@@ -18,8 +18,6 @@ static const unsigned int MAX_WORD_SIZE = 20;
 static const unsigned int CMD_DATA_SIZE = 40;
 static const unsigned int CMD_SIZE = CMD_DATA_SIZE + 1;
 
-static const char PREFIX = '[';
-
 static const char CMD_ACCOUNT_ID = '0';
 static const char CMD_BALANCE    = '1';
 static const char CMD_CLIENTS    = '2';
@@ -52,9 +50,10 @@ static const string EMPTY_STR = "                                        ";
 class Command {
 private:
     char code;
+    char num;
     string data;
 public:
-    Command(vector<string> tokens);
+    Command(vector<string> tokens, char number);
     static string wrapData(string data, int size, string wrap, bool start);
     operator string() const;
     friend ostream& operator<<(ostream& os, const Command& command);
@@ -62,7 +61,7 @@ public:
 
 bool receivedClientListItem(char *buf, bool next);
 bool requestedPing(char *buf);
-Command responsePing();
+Command responsePing(char number);
 
 
 #endif //UPDCLIENT_COMMAND_H
