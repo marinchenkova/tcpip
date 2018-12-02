@@ -65,12 +65,16 @@ ostream &operator<<(ostream &os, const Client &client) {
     return os << s;
 }
 
-int Client::nextNum() {
+void Client::nextNum() {
     if (_num == 8) {
         _num = 0;
-        return 8;
+        return;
     }
-    return _num++;
+    _num++;
+}
+
+int Client::getNum() {
+    return _num;
 }
 
 

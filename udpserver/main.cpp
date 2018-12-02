@@ -87,7 +87,7 @@ bool send(Command cmd, sockaddr_in* addr, int socket) {
                     (sockaddr*) addr,
                     sizeof(*addr)
     );
-
+    cout << "SEND MSG: [" << resparr << "]" << endl;
 
     return rc > 0;
 }
@@ -142,7 +142,7 @@ bool pingAll(int socket) {
     for (set<Client>::iterator it = clientSet.begin(); it != clientSet.end(); ++it) {
         Client *client = (Client *) &(*it);
         if (client->online()) {
-            cout << "PINGING " << *client << endl;
+            //cout << "PINGING " << *client << endl;
             client->logout();
             request = Command::requestPing(CMD_PING).c_str();
             rc = sendto(socket,
@@ -167,7 +167,7 @@ bool pingAll(int socket) {
 
 DWORD WINAPI pingThread(CONST LPVOID lpParam) {
     int socket = ((PCDATA) lpParam)->socket;
-    //while (pingAll(socket)) Sleep(PING_PERIOD);
+    while (pingAll(socket)) Sleep(PING_PERIOD);
     ExitThread(0);
 }
 
@@ -190,14 +190,15 @@ DWORD WINAPI receiveThread(CONST LPVOID lpParam) {
                       (sockaddr*) &from,
                       &fromlen
         );
-        Command cmd = Command(buf);
 
         WaitForSingleObject(hMutex, INFINITE);
         client = getClientByAddr(clientSet, &from);
-        if (client == NULL) clientSet.insert(Client(from, cmd.getNum()));
+        if (client == NULL) {
+            cout << "Client null" << endl;
+            clientSet.insert(Client(from, buf[0]));
+            client = getClientByAddr(clientSet, &from);
+        }
         ReleaseMutex(hMutex);
-
-        cout << "MSG [" << buf << "]" << endl;
 
         if (rc <= 0) {
             if (0 != (e = WSAGetLastError())) {
@@ -219,17 +220,18 @@ DWORD WINAPI receiveThread(CONST LPVOID lpParam) {
             if (client->isRegistered()) {
                 client->relog_in();
             }
-            else clientSet.erase(*client);
+            //else clientSet.erase(*client);
             ReleaseMutex(hMutex);
             continue;
         }
         ReleaseMutex(hMutex);
-/*
-        cn = client == NULL ? cmd.getNum() : client->nextNum();
-        cout << "cmd num=" << cmd.getNum()
-             << ", client num=" << cn << endl;
-        if (cmd.getNum() == cn) */
-            send(cmd, &from, socket);
+
+        cn = client->getNum();
+        cout << "cmd" << buf[0] << " client" << cn << endl;
+        if (buf[0] == cn) {
+            client->nextNum();
+            send(Command(buf), &from, socket);
+        }
     }
 
     cout << "BREAK" << endl;

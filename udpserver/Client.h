@@ -35,7 +35,8 @@ public:
     void kick();
     void moneyPut(unsigned long amount);
     void moneyGet(unsigned long amount);
-    int nextNum();
+    int getNum();
+    void nextNum();
     string getLogin() { return _login; }
     string getPassword() { return _password; }
     unsigned long getBalance() { return _balance; }

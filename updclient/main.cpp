@@ -78,11 +78,24 @@ void exitServer(int socket) {
 }
 
 char nextDgram() {
+    /*
     if (dgramNum == '8') {
         dgramNum = '0';
         return '8';
     }
     return dgramNum++;
+    */
+
+    if (dgramNum == '1') {
+        dgramNum++;
+        return '2';
+    }
+    if (dgramNum == '2') {
+        dgramNum++;
+        return '1';
+    }
+    return dgramNum++;
+
 }
 
 void printlnMsg(char *arr, int size) {
@@ -117,6 +130,8 @@ bool send(string msg, int socket, const sockaddr_in* dest, bool ping) {
     time_out.tv_sec = 1;
     time_out.tv_usec = 0;
 
+    cout << "SEND MSG: [" << msgarr << "]" << endl;
+
     rc = sendto(socket,
                 msgarr,
                 strlen(msgarr),
@@ -130,14 +145,15 @@ bool send(string msg, int socket, const sockaddr_in* dest, bool ping) {
 
         WaitForSingleObject(hMutex, INFINITE);
         if (!hasMsg && s == 0) {
-            cout << "Timeout error: retrying sending msg..." << endl;
-            rc = sendto(socket,
-                        msgarr,
-                        strlen(msgarr),
-                        0,
-                        (sockaddr*) dest,
-                        sizeof(*dest)
-            );
+            if (retries++ < RETRIES) {
+                cout << "Timeout error: retrying sending msg..." << endl;
+                send(msg, socket, dest, false);
+            }
+            else {
+                cout << "After " << --retries << " retries sending failed, retry later." << endl;
+                retries = 0;
+            }
+
         }
         hasMsg = false;
         ReleaseMutex(hMutex);
@@ -164,7 +180,7 @@ bool receive(int socket) {
     if (!ping) hasMsg = rc > 0;
     ReleaseMutex(hMutex);
 
-    if (rc <= 0) return retries++ < RETRIES;
+    if (rc <= 0) return retries < RETRIES;
     retries = 0;
 
     WaitForSingleObject(hMutex, INFINITE);
