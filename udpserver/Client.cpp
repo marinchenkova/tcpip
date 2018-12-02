@@ -12,11 +12,17 @@ void Client::registerMe(string login, string password, string id) {
     _balance = 0;
     _logged = true;
     _registered = true;
+    _kicked = false;
+}
+
+bool Client::online() const {
+    return !_kicked && _logged;
 }
 
 void Client::log_in(sockaddr_in addr) {
     _addr = addr;
     _logged = true;
+    _kicked = false;
 }
 
 void Client::relog_in() {
@@ -24,6 +30,11 @@ void Client::relog_in() {
 }
 
 void Client::logout() {
+    _logged = false;
+}
+
+void Client::kick() {
+    _kicked = true;
     _logged = false;
 }
 
@@ -41,10 +52,10 @@ bool Client::operator<(const Client &client) const {
 
 Client::operator string() const {
     stringstream ss;
-    ss << "[" << inet_ntoa(_addr.sin_addr) << ":" << _addr.sin_port << "]";
+    ss << "[" << inet_ntoa(_addr.sin_addr) << ":" << ntohs(_addr.sin_port) << "]";
     return ss.str() + "<" +
            (_registered
-            ? ("LOGIN[" + _login + "] ID[" + _id + "]" + (_logged ? " ONLINE" : " OFFLINE"))
+            ? ("LOGIN[" + _login + "] ID[" + _id + "]" + (online() ? " ONLINE" : " OFFLINE"))
             : "NOT REGISTERED") + ">";
 }
 
@@ -52,6 +63,8 @@ ostream &operator<<(ostream &os, const Client &client) {
     string s = client;
     return os << s;
 }
+
+
 
 Client* getClientByAddr(set<Client> &clientSet, sockaddr_in* addr) {
     for (set<Client>::iterator it = clientSet.begin(); it != clientSet.end(); ++it) {

@@ -103,7 +103,6 @@ void listClients() {
 
 void logoutClient(u_short port) {
     WaitForSingleObject(hMutex, INFINITE);
-    cout << "Kicking " << socket << endl;
 
     sockaddr_in addr;
     addr.sin_addr.s_addr = inet_addr(ADDR);
@@ -113,7 +112,7 @@ void logoutClient(u_short port) {
     Client* client = getClientByAddr(clientSet, &addr);
     if (client != NULL) {
         if (client->isRegistered()) {
-            client->logout();
+            client->kick();
         }
         else clientSet.erase(*client);
         cout << "Client on port " << port << " exited" << endl;
@@ -127,7 +126,7 @@ void logoutAll() {
     for (set<Client>::iterator it = clientSet.begin(); it != clientSet.end(); ++it) {
         Client* client = (Client *) &(*it);
         if (client->isRegistered()) {
-            client->logout();
+            client->kick();
         }
         else clientSet.erase(*client);
     }
@@ -185,23 +184,25 @@ DWORD WINAPI receiveThread(CONST LPVOID lpParam) {
                       (sockaddr*) &from,
                       &fromlen
         );
-
+        WaitForSingleObject(hMutex, INFINITE);
+        client = getClientByAddr(clientSet, &from);
         if (rc <= 0) {
-            perror("recvfrom");
-            cerr << "Winsock error " << WSAGetLastError() << endl;
+            client->logout();
+            cout << client << " now offline" << endl;
             break;
         }
 
-        cout << "MSG:" << buf << endl;
+        //cout << "MSG:" << buf << endl;
 
-        WaitForSingleObject(hMutex, INFINITE);
-        client = getClientByAddr(clientSet, &from);
+
 
         if (client == NULL) {
             clientSet.insert(Client(from));
         }
         else if (Command(buf).isPingResponse()) {
-            if (client->isRegistered()) client->relog_in();
+            if (client->isRegistered()) {
+                client->relog_in();
+            }
             else clientSet.erase(*client);
             ReleaseMutex(hMutex);
             continue;
@@ -259,7 +260,7 @@ int main() {
 
             case KICK:
                 WaitForSingleObject(hMutex, INFINITE);
-                cout << "Enter client socket to logoutClient: ";
+                cout << "Enter client port to logout" << endl;
                 cin >> ks;
                 ReleaseMutex(hMutex);
                 logoutClient(strtol(ks.c_str(), NULL, 0));

@@ -61,7 +61,7 @@ int checkBind(int ss, sockaddr_in* local) {
         exit(1);
     }
     cout << "Client "
-         << inet_ntoa(local->sin_addr) << ":" << local->sin_port
+         << inet_ntoa(local->sin_addr) << ":" << ntohs(local->sin_port)
          << " on socket " << ss << " started" << endl;
     return b;
 }
@@ -78,7 +78,7 @@ void printlnMsg(char *arr, int size) {
     for (int i = 2; i < size; i++) {
         printf( "%c", arr[i] );
     }
-    if (arr[0] != '\0') printf("\n");
+    printf("\n");
 }
 
 vector<string> split(const string& s, char delimiter) {
@@ -94,7 +94,6 @@ vector<string> split(const string& s, char delimiter) {
 bool send(string msg, int socket, const sockaddr_in* dest) {
     const char* msgarr;
     msgarr = msg.c_str();
-    cout << "[" << msg << "]" << endl;
     int rc = 0;
     rc = sendto(socket,
                 msgarr,
@@ -121,7 +120,7 @@ bool receive(int socket) {
         cout << "Server not responding" << endl;
         return false;
     }
-    cout << "MSG:" << buf << endl;
+    //cout << "MSG:" << buf << endl;
 
     WaitForSingleObject(hMutex, INFINITE);
     if (receivedClientListItem(buf, true)) {
@@ -131,9 +130,10 @@ bool receive(int socket) {
         send(Command(split(ss.str(), ' '), nextDgram()), socket, &from);
     }
     else iClient = 1;
-    if (!receivedClientListItem(buf, false)) printlnMsg(buf, CMD_SIZE);
-
     if (requestedPing(buf)) send(responsePing(CMD_PING), socket, &from);
+    else if (!receivedClientListItem(buf, false)) printlnMsg(buf, CMD_SIZE);
+
+
 
     ReleaseMutex(hMutex);
 

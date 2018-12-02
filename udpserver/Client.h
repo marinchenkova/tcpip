@@ -17,6 +17,7 @@ class Client {
 private:
     bool _registered = false;
     bool _logged = false;
+    bool _kicked = false;
     string _login;
     string _password;
     unsigned long _balance = 0;
@@ -25,11 +26,12 @@ private:
 
 public:
     Client(sockaddr_in addr);
-    bool online() { return _logged; }
+    bool online() const;
     void registerMe(string login, string password, string id);
     void log_in(sockaddr_in addr);
     void relog_in();
     void logout();
+    void kick();
     void moneyPut(unsigned long amount);
     void moneyGet(unsigned long amount);
     string getLogin() { return _login; }
